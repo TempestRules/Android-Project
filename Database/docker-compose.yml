@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+
+# Databases--------------------------------------------
+  freezy_database:
+    build:
+      context: ./freezy_database
+      dockerfile: Dockerfile
+    ports:
+      - "5432:5432"
+
+  
