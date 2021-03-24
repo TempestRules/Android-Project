@@ -2,6 +2,9 @@ package com.freezy.freezy_backend.Persistence.Entities;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Category")
@@ -40,11 +43,81 @@ public class Category {
     )
     private String color;
 
+    //One to many relationship with Group
+    @ManyToOne
+    @JoinColumn(
+            name = "category_group_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(
+                    name = "group_category_FK"
+            )
+    )
+    private Group group;
+
+    //Many to many relationship with Item
+    @ManyToMany(
+            mappedBy = "categories"
+    )
+    private List<Item> items = new ArrayList<>();
+
     public Category() {
     }
 
     public Category(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    //Getters and setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                ", group=" + group +
+                ", items=" + items +
+                '}';
     }
 }

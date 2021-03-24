@@ -3,6 +3,8 @@ package com.freezy.freezy_backend.Persistence.Entities;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -50,6 +52,35 @@ public class Item {
     )
     private String unit;
 
+    //One to many relationship with Group
+    @ManyToOne
+    @JoinColumn(
+            name = "storage_unit_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(
+                    name = "storage_unit_item_FK"
+            )
+    )
+    private Storage_Unit storage_unit;
+
+    //Many to many relationship with Category
+    @ManyToMany(
+            cascade = {CascadeType.ALL}
+    )
+    @JoinTable(
+            name = "Item_Category",
+            joinColumns = @JoinColumn(
+                    name = "item_id",
+                    foreignKey = @ForeignKey(name = "join_item_to_category_FK")
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "category_id",
+                    foreignKey = @ForeignKey(name = "join_category_to_item_FK")
+            )
+    )
+    private List<Category> categories = new ArrayList<>();
+
     public Item() {
     }
 
@@ -57,5 +88,76 @@ public class Item {
         this.name = name;
         this.expiration_date = expiration_date;
         this.unit = unit;
+    }
+
+    //Keeps items and categories synced both ways.
+    public void addCategoryToItem(Category category) {
+        categories.add(category);
+        category.getItems().add(this);
+    }
+    public void removeCategoryFromItem(Category category) {
+        categories.remove(category);
+        category.getItems().remove(this);
+    }
+
+    //Getters and setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDateTime getExpiration_date() {
+        return expiration_date;
+    }
+
+    public void setExpiration_date(LocalDateTime expiration_date) {
+        this.expiration_date = expiration_date;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Storage_Unit getStorage_unit() {
+        return storage_unit;
+    }
+
+    public void setStorage_unit(Storage_Unit storage_unit) {
+        this.storage_unit = storage_unit;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", expiration_date=" + expiration_date +
+                ", unit='" + unit + '\'' +
+                ", storage_unit=" + storage_unit +
+                ", categories=" + categories +
+                '}';
     }
 }

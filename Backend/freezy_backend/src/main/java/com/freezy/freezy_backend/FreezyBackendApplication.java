@@ -20,4 +20,9 @@ public class FreezyBackendApplication {
 		};
 	}
 
+	private void createBasicAccount() {
+
+
+	}
+
 }

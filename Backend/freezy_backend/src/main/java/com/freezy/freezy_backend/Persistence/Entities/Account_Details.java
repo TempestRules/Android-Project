@@ -2,6 +2,9 @@ package com.freezy.freezy_backend.Persistence.Entities;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Account_Details")
@@ -32,10 +35,86 @@ public class Account_Details {
     )
     private String name;
 
+    //One to one relationship with Account_Login
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "account_login_id",
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(
+                    name = "Account_Details_Account_Login_FK"
+            )
+    )
+    private Account_Login account_login;
+
+    //One to many relationship with Group
+    @OneToMany(
+            mappedBy = "account_details",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
+    )
+    private List<Group> groups = new ArrayList<>();
+
     public Account_Details() {
     }
 
     public Account_Details(String name) {
         this.name = name;
+    }
+
+    //Methods to add or remove groups. Keeps them both in sync.
+    public void addGroup(Group group) {
+        if (!this.groups.contains(group)) {
+            this.groups.add(group);
+            group.setAccount_details(this);
+        }
+    }
+    public void removeGroup(Group group) {
+        if (this.groups.contains(group)) {
+            this.groups.remove(group);
+            group.setAccount_details(null);
+        }
+    }
+
+    //Getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Account_Login getAccount_login() {
+        return account_login;
+    }
+
+    public void setAccount_login(Account_Login account_login) {
+        this.account_login = account_login;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
+
+    @Override
+    public String toString() {
+        return "Account_Details{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", account_login=" + account_login +
+                ", groups=" + groups +
+                '}';
     }
 }
