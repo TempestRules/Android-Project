@@ -43,17 +43,17 @@ public class Category {
     )
     private String color;
 
-    //One to many relationship with Group
+    //One to many relationship with Collection
     @ManyToOne
     @JoinColumn(
-            name = "category_group_id",
+            name = "category_collection_id",
             nullable = false,
             referencedColumnName = "id",
             foreignKey = @ForeignKey(
-                    name = "group_category_FK"
+                    name = "collection_category_FK"
             )
     )
-    private Group group;
+    private Collection collection;
 
     //Many to many relationship with Item
     @ManyToMany(
@@ -86,12 +86,12 @@ public class Category {
         this.color = color;
     }
 
-    public Group getGroup() {
-        return group;
+    public Collection getCollection() {
+        return collection;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setCollection(Collection collection) {
+        this.collection = collection;
     }
 
     public List<Item> getItems() {
@@ -116,7 +116,7 @@ public class Category {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
-                ", group=" + group +
+                ", collection=" + collection +
                 ", items=" + items +
                 '}';
     }

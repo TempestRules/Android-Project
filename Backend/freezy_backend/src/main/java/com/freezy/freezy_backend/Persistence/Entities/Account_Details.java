@@ -39,6 +39,7 @@ public class Account_Details {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(
             name = "account_login_id",
+            nullable = false,
             referencedColumnName = "id",
             foreignKey = @ForeignKey(
                     name = "Account_Details_Account_Login_FK"
@@ -46,13 +47,13 @@ public class Account_Details {
     )
     private Account_Login account_login;
 
-    //One to many relationship with Group
+    //One to many relationship with collection
     @OneToMany(
             mappedBy = "account_details",
             orphanRemoval = true,
             cascade = CascadeType.ALL
     )
-    private List<Group> groups = new ArrayList<>();
+    private List<Collection> collections = new ArrayList<>();
 
     public Account_Details() {
     }
@@ -61,17 +62,17 @@ public class Account_Details {
         this.name = name;
     }
 
-    //Methods to add or remove groups. Keeps them both in sync.
-    public void addGroup(Group group) {
-        if (!this.groups.contains(group)) {
-            this.groups.add(group);
-            group.setAccount_details(this);
+    //Methods to add or remove collections. Keeps them both in sync.
+    public void addCollection(Collection collection) {
+        if (!this.collections.contains(collection)) {
+            this.collections.add(collection);
+            collection.setAccount_details(this);
         }
     }
-    public void removeGroup(Group group) {
-        if (this.groups.contains(group)) {
-            this.groups.remove(group);
-            group.setAccount_details(null);
+    public void removeCollection(Collection collection) {
+        if (this.collections.contains(collection)) {
+            this.collections.remove(collection);
+            collection.setAccount_details(null);
         }
     }
 
@@ -100,12 +101,12 @@ public class Account_Details {
         this.account_login = account_login;
     }
 
-    public List<Group> getGroups() {
-        return groups;
+    public List<Collection> getCollections() {
+        return collections;
     }
 
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
+    public void setCollections(List<Collection> collections) {
+        this.collections = collections;
     }
 
     @Override
@@ -114,7 +115,7 @@ public class Account_Details {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", account_login=" + account_login +
-                ", groups=" + groups +
+                ", collections=" + collections +
                 '}';
     }
 }

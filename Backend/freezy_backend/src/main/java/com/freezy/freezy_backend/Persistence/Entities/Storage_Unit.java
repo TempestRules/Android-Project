@@ -35,17 +35,17 @@ public class Storage_Unit {
     )
     private String name;
 
-    //One to many relationship with Group
+    //One to many relationship with Collection
     @ManyToOne
     @JoinColumn(
-            name = "storage_unit_group_id",
+            name = "storage_unit_collection_id",
             nullable = false,
             referencedColumnName = "id",
             foreignKey = @ForeignKey(
-                    name = "group_storage_unit_FK"
+                    name = "collection_storage_unit_FK"
             )
     )
-    private Group group;
+    private Collection collection;
 
     //One to many relationship with Item
     @OneToMany(
@@ -85,12 +85,12 @@ public class Storage_Unit {
         this.name = name;
     }
 
-    public Group getGroup() {
-        return group;
+    public Collection getCollection() {
+        return collection;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setCollection(Collection collection) {
+        this.collection = collection;
     }
 
     public Long getId() {
@@ -114,7 +114,7 @@ public class Storage_Unit {
         return "Storage_Unit{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", group=" + group +
+                ", collection=" + collection +
                 ", items=" + items +
                 '}';
     }

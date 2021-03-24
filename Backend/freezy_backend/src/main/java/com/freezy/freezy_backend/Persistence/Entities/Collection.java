@@ -4,23 +4,22 @@ import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
-@Entity(name = "Group")
-@Table(name = "group")
-public class Group {
+@Entity(name = "Collection")
+@Table(name = "collection")
+public class Collection {
 
     @Id
     @SequenceGenerator(
-            name = "group_sequence",
-            sequenceName = "group_sequence",
+            name = "collection_sequence",
+            sequenceName = "collection_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "group_sequence"
+            generator = "collection_sequence"
     )
     @Column(
             name = "id",
@@ -30,11 +29,11 @@ public class Group {
     private Long id;
 
     @Column(
-            name = "group_token",
+            name = "collection_token",
             nullable = false,
             updatable = false
     )
-    private UUID group_token;
+    private String collection_token;
 
     //One to many relationship with Account_Details
     @ManyToOne
@@ -43,14 +42,14 @@ public class Group {
             nullable = false,
             referencedColumnName = "id",
             foreignKey = @ForeignKey(
-                    name = "account_details_group_FK"
+                    name = "account_details_collection_FK"
             )
     )
     private Account_Details account_details;
 
     //One to many relationship with Storage_Unit
     @OneToMany(
-            mappedBy = "group",
+            mappedBy = "collection",
             orphanRemoval = true,
             cascade = CascadeType.ALL
     )
@@ -58,30 +57,30 @@ public class Group {
 
     //One to many relationship with Category
     @OneToMany(
-            mappedBy = "group",
+            mappedBy = "collection",
             orphanRemoval = true,
             cascade = CascadeType.ALL
     )
     private List<Category> categories = new ArrayList<>();
 
-    public Group() {
+    public Collection() {
     }
 
-    public Group(UUID group_token) {
-        this.group_token = group_token;
+    public Collection(String collection_token) {
+        this.collection_token = collection_token;
     }
 
     //Methods to add or remove storage units. Keeps them both in sync.
     public void addStorage_Unit(Storage_Unit storage_unit) {
         if (!this.storage_units.contains(storage_unit)) {
             this.storage_units.add(storage_unit);
-            storage_unit.setGroup(this);
+            storage_unit.setCollection(this);
         }
     }
     public void removeStorage_Unit(Storage_Unit storage_unit) {
         if (this.storage_units.contains(storage_unit)) {
             this.storage_units.remove(storage_unit);
-            storage_unit.setGroup(null);
+            storage_unit.setCollection(null);
         }
     }
 
@@ -89,23 +88,23 @@ public class Group {
     public void addCategory(Category category) {
         if (!this.categories.contains(category)) {
             this.categories.add(category);
-            category.setGroup(this);
+            category.setCollection(this);
         }
     }
     public void removeCategory(Category category) {
         if (this.categories.contains(category)) {
             this.categories.remove(category);
-            category.setGroup(null);
+            category.setCollection(null);
         }
     }
 
     //Getters and setters
-    public UUID getGroup_token() {
-        return group_token;
+    public String getCollection_token() {
+        return collection_token;
     }
 
-    public void setGroup_token(UUID group_token) {
-        this.group_token = group_token;
+    public void setCollection_token(String collection_token) {
+        this.collection_token = collection_token;
     }
 
     public Account_Details getAccount_details() {
@@ -142,9 +141,9 @@ public class Group {
 
     @Override
     public String toString() {
-        return "Group{" +
+        return "Collection{" +
                 "id=" + id +
-                ", group_token=" + group_token +
+                ", collection_token=" + collection_token +
                 ", account_details=" + account_details +
                 ", storage_units=" + storage_units +
                 ", categories=" + categories +

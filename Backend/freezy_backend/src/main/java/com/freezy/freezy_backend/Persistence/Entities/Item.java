@@ -52,7 +52,7 @@ public class Item {
     )
     private String unit;
 
-    //One to many relationship with Group
+    //One to many relationship with Storage_Unit
     @ManyToOne
     @JoinColumn(
             name = "storage_unit_id",
