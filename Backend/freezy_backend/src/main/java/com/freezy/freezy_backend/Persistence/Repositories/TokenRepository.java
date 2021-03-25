@@ -12,4 +12,8 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     Token getTokenByTokenWithAccountLogin(UUID token);
 
     Token getTokenById(Long id);
+
+    boolean existsByToken(UUID token);
+
+    Token getTokenByToken(UUID token);
 }

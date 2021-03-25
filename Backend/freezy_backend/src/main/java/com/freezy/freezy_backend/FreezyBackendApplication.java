@@ -29,18 +29,12 @@ public class FreezyBackendApplication {
 	CommandLineRunner commandLineRunner(Account_Login_Repository account_login_repository, TokenRepository tokenRepository, Account_Details_Repository account_details_repository) {
 		return args -> {
 
-
-			Token token = tokenRepository.getTokenById(966L);
-			System.out.println(token.getId());
-			System.out.println(token.getAccount_login().getId());
-			System.out.println(token.getAccount_login().getUsername());
-
-			System.out.println(token.getAccount_login().getAccount_details().getName());
-
-			System.out.println(token.getAccount_login().getAccount_details().);
-
-
 			createBasicAccount(account_login_repository);
+
+			UUID test = UUID.fromString("8be10468-38e3-4ade-8a87-efb0062e865b");
+
+			System.out.println(tokenRepository.existsByToken(test));
+
 		};
 	}
 
