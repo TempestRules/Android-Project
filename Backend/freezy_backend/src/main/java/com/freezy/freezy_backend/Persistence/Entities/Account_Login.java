@@ -41,10 +41,18 @@ public class Account_Login {
     private String password;
 
 
-    @OneToOne(mappedBy = "account_login")
+    @OneToOne(
+            mappedBy = "account_login",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
     private Token token;
 
-    @OneToOne(mappedBy = "account_login")
+    @OneToOne(
+            mappedBy = "account_login",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
     private Account_Details account_details;
 
     public Account_Login() {
@@ -53,6 +61,32 @@ public class Account_Login {
     public Account_Login(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public void addToken(Token token) {
+        if (this.token == null) {
+            this.token = token;
+            token.setAccount_login(this);
+        }
+    }
+    public void removeToken(Token token) {
+        if (this.token != null) {
+            this.token = null;
+            token.setAccount_login(null);
+        }
+    }
+
+    public void addAccount_Details(Account_Details account_details) {
+        if (this.account_details == null) {
+            this.account_details = account_details;
+            account_details.setAccount_login(this);
+        }
+    }
+    public void removeAccount_Details(Account_Details account_details) {
+        if (this.account_details != null) {
+            this.account_details = null;
+            account_details.setAccount_login(null);
+        }
     }
 
     //Getters and setters
