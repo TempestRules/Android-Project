@@ -5,6 +5,7 @@ import java.util.UUID;
 public class Storage {
 
     private UUID accessToken;
+    private Long storageId;
     private String name;
 
     public UUID getAccessToken() {
@@ -21,5 +22,13 @@ public class Storage {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getStorageId() {
+        return storageId;
+    }
+
+    public void setStorageId(Long storageId) {
+        this.storageId = storageId;
     }
 }

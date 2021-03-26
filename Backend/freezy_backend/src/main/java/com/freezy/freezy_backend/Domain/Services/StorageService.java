@@ -1,6 +1,8 @@
 package com.freezy.freezy_backend.Domain.Services;
 
+import com.freezy.freezy_backend.Domain.RequestBodies.AuthenticationToken;
 import com.freezy.freezy_backend.Domain.RequestBodies.Storage;
+import com.freezy.freezy_backend.Persistence.Entities.Storage_Unit;
 import com.freezy.freezy_backend.Persistence.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,32 +10,52 @@ import org.springframework.stereotype.Service;
 @Service
 public class StorageService {
 
-    private final TokenRepository tokenRepository;
-
-    private final Account_Login_Repository account_login_repository;
-
-    private final Account_Details_Repository account_details_repository;
-
-    private final CollectionRepository collectionRepository;
-
-    private final Storage_Unit_Repository storage_unit_repository;
-
-    private final ItemRepository itemRepository;
-
-    private final CategoryRepository categoryRepository;
+    @Autowired
+    private TokenRepository tokenRepository;
 
     @Autowired
-    public StorageService(TokenRepository tokenRepository, Account_Login_Repository account_login_repository, Account_Details_Repository account_details_repository, CollectionRepository collectionRepository, Storage_Unit_Repository storage_unit_repository, ItemRepository itemRepository, CategoryRepository categoryRepository) {
-        this.tokenRepository = tokenRepository;
-        this.account_login_repository = account_login_repository;
-        this.account_details_repository = account_details_repository;
-        this.collectionRepository = collectionRepository;
-        this.storage_unit_repository = storage_unit_repository;
-        this.itemRepository = itemRepository;
-        this.categoryRepository = categoryRepository;
+    private Account_Login_Repository account_login_repository;
+
+    @Autowired
+    private Account_Details_Repository account_details_repository;
+
+    @Autowired
+    private CollectionRepository collectionRepository;
+
+    @Autowired
+    private Storage_Unit_Repository storage_unit_repository;
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+
+    public StorageService() {
     }
 
     public void addStorage_Unit(Storage storage) {
 
     }
+
+    public void updateStorage_Unit(Storage storage) {
+        if (authenticationService.verifyToken(storage.getAccessToken())) {
+            Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitById(storage.getStorageId());
+            storage_unit.setName(storage.getName());
+            storage_unit_repository.save(storage_unit);
+        }
+        //TODO: No else?
+    }
+
+    public void deleteStorage_Unit(Storage storage) {
+        if (authenticationService.verifyToken(storage.getAccessToken())) {
+            storage_unit_repository.deleteById(storage.getStorageId());
+        }
+    }
+
+
 }
