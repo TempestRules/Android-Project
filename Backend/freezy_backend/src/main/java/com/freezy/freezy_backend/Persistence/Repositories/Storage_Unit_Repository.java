@@ -11,5 +11,5 @@ public interface Storage_Unit_Repository extends JpaRepository<Storage_Unit, Lon
     boolean existsByName(String name);
 
     @Query("SELECT s FROM Storage_Unit s JOIN FETCH s.items WHERE s.id = (:id)")
-    Storage_Unit findStorage_UnitByWithItems(Long id);
+    Storage_Unit findStorage_UnitByIdWithItems(Long id);
 }

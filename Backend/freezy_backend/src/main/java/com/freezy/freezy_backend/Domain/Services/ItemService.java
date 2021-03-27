@@ -1,10 +1,14 @@
 package com.freezy.freezy_backend.Domain.Services;
 
 import com.freezy.freezy_backend.Domain.RequestBodies.ItemBody;
+import com.freezy.freezy_backend.Domain.RequestBodies.ItemReturnBody;
 import com.freezy.freezy_backend.Persistence.Entities.*;
 import com.freezy.freezy_backend.Persistence.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ItemService {
@@ -27,11 +31,14 @@ public class ItemService {
     @Autowired
     ItemRepository itemRepository;
 
+    public ItemService() {
+    }
+
     public boolean createItem(ItemBody itemBody) {
         try {
             if (authenticationService.verifyToken(itemBody.getAccessToken())) {
 
-                Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByWithItems(itemBody.getStorage_Unit_Id());
+                Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
 
                 //Creating and adding item to selected storage_unit
                 Item item = new Item(itemBody.getName(), itemBody.getExpirationDate(), itemBody.getUnit());
@@ -76,7 +83,7 @@ public class ItemService {
                     oldStorage_Unit.removeItem(item);
 
                     //Adding item to new storage unit
-                    Storage_Unit newStorage_Unit = storage_unit_repository.findStorage_UnitByWithItems(itemBody.getStorage_Unit_Id());
+                    Storage_Unit newStorage_Unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
                     newStorage_Unit.addItem(item);
 
                     storage_unit_repository.save(oldStorage_Unit);
@@ -117,5 +124,29 @@ public class ItemService {
         } catch (Exception e) {
             System.out.println("DeleteItem EXCEPTION: " + e);
         }
+    }
+
+    public List<ItemReturnBody> getAllItems(ItemBody itemBody) {
+        try {
+            List<ItemReturnBody> items = new ArrayList<>();
+
+            Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
+            for (Item item: storage_unit.getItems()) {
+                ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit());
+                //Adding all category id's
+                List<Long> categoryIds = new ArrayList<>();
+                for (Category category: item.getCategories()) {
+                    categoryIds.add(category.getId());
+                }
+                newItem.setCategoryIds(categoryIds);
+
+                items.add(newItem);
+            }
+
+            return items;
+        } catch (Exception e) {
+            System.out.println("GetAllItemsException EXCEPTION: " + e);
+        }
+        return null;
     }
 }

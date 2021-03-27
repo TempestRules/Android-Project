@@ -8,6 +8,9 @@ import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CategoryService {
 
@@ -22,6 +25,9 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    public CategoryService() {
+    }
 
     public boolean createCategory(CategoryBody categoryBody) {
         try {
@@ -91,5 +97,28 @@ public class CategoryService {
         } catch (Exception e) {
             System.out.println("DeleteCategory EXCEPTION: " + e);
         }
+    }
+
+    public List<Category> getAllCategories(CategoryBody categoryBody) {
+        try {
+            List<Category> categories = new ArrayList<>();
+
+            Token token = tokenRepository.getTokenByToken(categoryBody.getAccessToken());
+            Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
+                    .getCollections().get(0).getId());
+
+            for (Category category: collection.getCategories()) {
+                Category newCategory = new Category(category.getName(), category.getColor());
+                newCategory.setId(category.getId());
+
+                categories.add(newCategory);
+            }
+
+            return categories;
+
+        } catch (Exception e) {
+            System.out.println("GetAllCategories EXCEPTION: " + e);
+        }
+        return null;
     }
 }

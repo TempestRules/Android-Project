@@ -8,6 +8,9 @@ import com.freezy.freezy_backend.Persistence.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class StorageService {
 
@@ -22,7 +25,6 @@ public class StorageService {
 
     @Autowired
     private AuthenticationService authenticationService;
-
 
     public StorageService() {
     }
@@ -74,4 +76,26 @@ public class StorageService {
         }
     }
 
+    public List<Storage_Unit> getAllStorages(Storage storage) {
+        try {
+            List<Storage_Unit> storage_units = new ArrayList<>();
+
+            Token token = tokenRepository.getTokenByTokenWithAccountLogin(storage.getAccessToken());
+            Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
+                    .getCollections().get(0).getId());
+
+            for (Storage_Unit storage_unit: collection.getStorage_units()) {
+                Storage_Unit newStorageUnit = new Storage_Unit(storage_unit.getName());
+                newStorageUnit.setId(storage_unit.getId());
+
+                storage_units.add(newStorageUnit);
+            }
+
+            return storage_units;
+
+        } catch (Exception e) {
+            System.out.println("GetAllStorages EXCEPTION: " + e);
+        }
+        return null;
+    }
 }
