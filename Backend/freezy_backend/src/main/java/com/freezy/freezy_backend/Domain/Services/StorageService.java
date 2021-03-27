@@ -27,41 +27,50 @@ public class StorageService {
     public StorageService() {
     }
 
-    public boolean addStorage_Unit(Storage storage) {
-        if (authenticationService.verifyToken(storage.getAccessToken())) {
-            //Making sure that two identical storage_units can't be created.
-            if (!storage_unit_repository.existsByName(storage.getName())) {
-                Token token = tokenRepository.getTokenByToken(storage.getAccessToken());
-                Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
-                        .getCollections().get(0).getId());
+    public boolean createStorage_Unit(Storage storage) {
+        try {
+            if (authenticationService.verifyToken(storage.getAccessToken())) {
+                //Making sure that two identical storage_units can't be created.
+                if (!storage_unit_repository.existsByName(storage.getName())) {
+                    Token token = tokenRepository.getTokenByToken(storage.getAccessToken());
+                    Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
+                            .getCollections().get(0).getId());
 
-                //Creating and adding the new Storage_Unit to the collection.
-                Storage_Unit storage_unit = new Storage_Unit(storage.getName());
-                collection.addStorage_Unit(storage_unit);
+                    //Creating and adding the new Storage_Unit to the collection.
+                    Storage_Unit storage_unit = new Storage_Unit(storage.getName());
+                    collection.addStorage_Unit(storage_unit);
 
-                collectionRepository.save(collection);
-                return true;
+                    collectionRepository.save(collection);
+                    return true;
+                }
+
             }
-
-        } else {
-            return false;
+        } catch (Exception e) {
+            System.out.println("CreateStorage_Unit EXCEPTION: " + e);
         }
 
         return false;
     }
 
     public void updateStorage_Unit(Storage storage) {
-        if (authenticationService.verifyToken(storage.getAccessToken())) {
-            Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitById(storage.getStorageId());
-            storage_unit.setName(storage.getName());
-            storage_unit_repository.save(storage_unit);
+        try {
+            if (authenticationService.verifyToken(storage.getAccessToken())) {
+                Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitById(storage.getStorageId());
+                storage_unit.setName(storage.getName());
+                storage_unit_repository.save(storage_unit);
+            }
+        } catch (Exception e) {
+            System.out.println("UpdateStorage_Unit EXCEPTION: " + e);
         }
-        //TODO: No else?
     }
 
     public void deleteStorage_Unit(Storage storage) {
-        if (authenticationService.verifyToken(storage.getAccessToken())) {
-            storage_unit_repository.deleteById(storage.getStorageId());
+        try {
+            if (authenticationService.verifyToken(storage.getAccessToken())) {
+                storage_unit_repository.deleteById(storage.getStorageId());
+            }
+        } catch (Exception e) {
+            System.out.println("DeleteStorage_Unit EXCEPTION: " + e);
         }
     }
 

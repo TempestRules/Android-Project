@@ -30,14 +30,19 @@ public class AuthenticationService {
 
     //Authenticates the user login
     public boolean verifyLogin(Login login) {
-        //Verify that username exists
-        if (account_login_repository.existsByUsername(login.getUsername())) {
-            Account_Login account_login = account_login_repository.findAccount_LoginByUsername(login.getUsername());
-            //Verifying username and password.
-            if (account_login.getUsername().equals(login.getUsername())
-                    && bCryptPasswordEncoder.matches(login.getPassword(), account_login.getPassword())) {
-                return true;
+        try {
+
+            //Verify that username exists
+            if (account_login_repository.existsByUsername(login.getUsername())) {
+                Account_Login account_login = account_login_repository.findAccount_LoginByUsername(login.getUsername());
+                //Verifying username and password.
+                if (account_login.getUsername().equals(login.getUsername())
+                        && bCryptPasswordEncoder.matches(login.getPassword(), account_login.getPassword())) {
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            System.out.println("VerifyLogin EXCEPTION: " + e);
         }
 
         return false;
@@ -67,7 +72,7 @@ public class AuthenticationService {
             }
 
         } catch (Exception e) {
-            System.out.println("ERROR AT CREATE LOGIN: " + e);
+            System.out.println("CreateUser EXCEPTION: " + e);
             return false;
         }
 
@@ -81,12 +86,18 @@ public class AuthenticationService {
     }
 
     public AccountDetails getAccountDetails(UUID authenticationToken) {
-        Token token = tokenRepository.getTokenByToken(authenticationToken);
+        try {
+            Token token = tokenRepository.getTokenByToken(authenticationToken);
 
-        AccountDetails accountDetails = new AccountDetails();
-        accountDetails.setName(token.getAccount_login().getAccount_details().getName());
-        accountDetails.setToken(token.getAccount_login().getAccount_details().getCollections().get(0).getCollection_token());
+            AccountDetails accountDetails = new AccountDetails();
+            accountDetails.setName(token.getAccount_login().getAccount_details().getName());
+            accountDetails.setToken(token.getAccount_login().getAccount_details().getCollections().get(0).getCollection_token());
 
-        return accountDetails;
+            return accountDetails;
+
+        } catch (Exception e) {
+            System.out.println("GetAccountDetails EXCEPTION: " + e);
+        }
+        return null;
     }
 }

@@ -45,7 +45,7 @@ public class CreateController {
 
     @PostMapping("/Storage")
     public ResponseEntity<?> addStorage(@RequestBody Storage storage) {
-        if (storageService.addStorage_Unit(storage)) {
+        if (storageService.createStorage_Unit(storage)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
