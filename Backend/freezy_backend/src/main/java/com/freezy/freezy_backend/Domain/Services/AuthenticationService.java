@@ -2,7 +2,9 @@ package com.freezy.freezy_backend.Domain.Services;
 
 import com.freezy.freezy_backend.Domain.RequestBodies.AccountDetails;
 import com.freezy.freezy_backend.Domain.RequestBodies.Login;
+import com.freezy.freezy_backend.Persistence.Entities.Account_Details;
 import com.freezy.freezy_backend.Persistence.Entities.Account_Login;
+import com.freezy.freezy_backend.Persistence.Entities.Collection;
 import com.freezy.freezy_backend.Persistence.Entities.Token;
 import com.freezy.freezy_backend.Persistence.Repositories.Account_Login_Repository;
 import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
@@ -49,6 +51,15 @@ public class AuthenticationService {
 
                 Account_Login account_login = new Account_Login(login.getUsername(),
                         bCryptPasswordEncoder.encode(login.getPassword()));
+
+                Account_Details account_details = new Account_Details(login.getAccountDetailsName());
+
+                //Generating random collection token.
+                Collection collection = new Collection(UUID.randomUUID());
+
+                account_details.addCollection(collection);
+
+                account_login.addAccount_Details(account_details);
 
                 account_login_repository.save(account_login);
             } else {

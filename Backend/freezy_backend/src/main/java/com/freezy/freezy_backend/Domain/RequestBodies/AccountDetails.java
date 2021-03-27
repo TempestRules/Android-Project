@@ -1,10 +1,11 @@
 package com.freezy.freezy_backend.Domain.RequestBodies;
 
+import java.util.UUID;
+
 public class AccountDetails {
 
     private String name;
-    //TODO: Is collectiontoken a uuid?
-    private String token;
+    private UUID token;
 
     public String getName() {
         return name;
@@ -14,11 +15,11 @@ public class AccountDetails {
         this.name = name;
     }
 
-    public String getToken() {
+    public UUID getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(UUID token) {
         this.token = token;
     }
 }

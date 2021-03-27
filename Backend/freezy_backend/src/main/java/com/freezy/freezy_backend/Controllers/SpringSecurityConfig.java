@@ -22,6 +22,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/Delete/Storage").permitAll()
                 .antMatchers(HttpMethod.PUT, "/Update/Category").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/Delete/Category").permitAll()
+                .antMatchers(HttpMethod.POST, "/Create/Category").permitAll()
+                .antMatchers(HttpMethod.POST, "/Create/Item").permitAll()
+                .antMatchers(HttpMethod.PUT, "/Update/Item").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/Delete/Item").permitAll()
                 .anyRequest().authenticated();
     }
 }

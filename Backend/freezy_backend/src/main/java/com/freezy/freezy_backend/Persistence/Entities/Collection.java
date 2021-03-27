@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -33,7 +34,7 @@ public class Collection {
             nullable = false,
             updatable = false
     )
-    private String collection_token;
+    private UUID collection_token;
 
     //One to many relationship with Account_Details
     @ManyToOne
@@ -66,7 +67,7 @@ public class Collection {
     public Collection() {
     }
 
-    public Collection(String collection_token) {
+    public Collection(UUID collection_token) {
         this.collection_token = collection_token;
     }
 
@@ -99,11 +100,11 @@ public class Collection {
     }
 
     //Getters and setters
-    public String getCollection_token() {
+    public UUID getCollection_token() {
         return collection_token;
     }
 
-    public void setCollection_token(String collection_token) {
+    public void setCollection_token(UUID collection_token) {
         this.collection_token = collection_token;
     }
 

@@ -1,9 +1,13 @@
 package com.freezy.freezy_backend.Controllers;
 
 
+import com.freezy.freezy_backend.Domain.RequestBodies.CategoryBody;
+import com.freezy.freezy_backend.Domain.RequestBodies.ItemBody;
 import com.freezy.freezy_backend.Domain.RequestBodies.Login;
 import com.freezy.freezy_backend.Domain.RequestBodies.Storage;
 import com.freezy.freezy_backend.Domain.Services.AuthenticationService;
+import com.freezy.freezy_backend.Domain.Services.CategoryService;
+import com.freezy.freezy_backend.Domain.Services.ItemService;
 import com.freezy.freezy_backend.Domain.Services.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +24,14 @@ public class CreateController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    //private final StorageService storageService;
+    @Autowired
+    private StorageService storageService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private ItemService itemService;
 
     //Signing a new user up.
     @PostMapping("/Signup")
@@ -32,15 +43,30 @@ public class CreateController {
         }
     }
 
-    //TODO
     @PostMapping("/Storage")
     public ResponseEntity<?> addStorage(@RequestBody Storage storage) {
-        if (authenticationService.verifyToken(storage.getAccessToken())) {
-
-
+        if (storageService.addStorage_Unit(storage)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping("/Category")
+    public ResponseEntity<?> addCategory(@RequestBody CategoryBody categoryBody) {
+        if (categoryService.createCategory(categoryBody)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/Item")
+    public ResponseEntity<?> addItem(@RequestBody ItemBody itemBody) {
+        if (itemService.createItem(itemBody)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

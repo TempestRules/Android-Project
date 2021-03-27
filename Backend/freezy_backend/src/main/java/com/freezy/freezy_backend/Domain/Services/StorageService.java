@@ -1,8 +1,9 @@
 package com.freezy.freezy_backend.Domain.Services;
 
-import com.freezy.freezy_backend.Domain.RequestBodies.AuthenticationToken;
 import com.freezy.freezy_backend.Domain.RequestBodies.Storage;
+import com.freezy.freezy_backend.Persistence.Entities.Collection;
 import com.freezy.freezy_backend.Persistence.Entities.Storage_Unit;
+import com.freezy.freezy_backend.Persistence.Entities.Token;
 import com.freezy.freezy_backend.Persistence.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,22 +15,10 @@ public class StorageService {
     private TokenRepository tokenRepository;
 
     @Autowired
-    private Account_Login_Repository account_login_repository;
-
-    @Autowired
-    private Account_Details_Repository account_details_repository;
-
-    @Autowired
     private CollectionRepository collectionRepository;
 
     @Autowired
     private Storage_Unit_Repository storage_unit_repository;
-
-    @Autowired
-    private ItemRepository itemRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -38,8 +27,27 @@ public class StorageService {
     public StorageService() {
     }
 
-    public void addStorage_Unit(Storage storage) {
+    public boolean addStorage_Unit(Storage storage) {
+        if (authenticationService.verifyToken(storage.getAccessToken())) {
+            //Making sure that two identical storage_units can't be created.
+            if (!storage_unit_repository.existsByName(storage.getName())) {
+                Token token = tokenRepository.getTokenByToken(storage.getAccessToken());
+                Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
+                        .getCollections().get(0).getId());
 
+                //Creating and adding the new Storage_Unit to the collection.
+                Storage_Unit storage_unit = new Storage_Unit(storage.getName());
+                collection.addStorage_Unit(storage_unit);
+
+                collectionRepository.save(collection);
+                return true;
+            }
+
+        } else {
+            return false;
+        }
+
+        return false;
     }
 
     public void updateStorage_Unit(Storage storage) {
@@ -56,6 +64,5 @@ public class StorageService {
             storage_unit_repository.deleteById(storage.getStorageId());
         }
     }
-
 
 }

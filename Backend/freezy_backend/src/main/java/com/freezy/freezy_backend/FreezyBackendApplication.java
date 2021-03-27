@@ -1,10 +1,13 @@
 package com.freezy.freezy_backend;
 
+import com.freezy.freezy_backend.Domain.RequestBodies.ItemBody;
+import com.freezy.freezy_backend.Domain.Services.ItemService;
 import com.freezy.freezy_backend.Persistence.Entities.*;
 import com.freezy.freezy_backend.Persistence.Repositories.Account_Details_Repository;
 import com.freezy.freezy_backend.Persistence.Repositories.Account_Login_Repository;
 import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -31,9 +36,6 @@ public class FreezyBackendApplication {
 
 			createBasicAccount(account_login_repository);
 
-			UUID test = UUID.fromString("8be10468-38e3-4ade-8a87-efb0062e865b");
-
-			System.out.println(tokenRepository.existsByToken(test));
 
 		};
 	}
@@ -51,7 +53,7 @@ public class FreezyBackendApplication {
 
 		Account_Details account_details = new Account_Details("TestUserName");
 
-		Collection collection = new Collection("CollectionToken");
+		Collection collection = new Collection(UUID.randomUUID());
 
 		Storage_Unit storage_unit = new Storage_Unit("Freezer");
 

@@ -69,6 +69,16 @@ public class Category {
         this.color = color;
     }
 
+    //Keeps items and categories synced both ways.
+    public void addItemToCategory(Item item) {
+        items.add(item);
+        item.getCategories().add(this);
+    }
+    public void removeItemFromCategory(Item item) {
+        items.remove(item);
+        item.getCategories().remove(this);
+    }
+
     //Getters and setters
     public String getName() {
         return name;
