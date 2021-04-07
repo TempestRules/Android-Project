@@ -7,11 +7,13 @@ import com.freezy.freezy_backend.Persistence.Entities.Account_Login;
 import com.freezy.freezy_backend.Persistence.Entities.Collection;
 import com.freezy.freezy_backend.Persistence.Entities.Token;
 import com.freezy.freezy_backend.Persistence.Repositories.Account_Login_Repository;
+import com.freezy.freezy_backend.Persistence.Repositories.CollectionRepository;
 import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,6 +25,9 @@ public class AuthenticationService {
     @Autowired
     private TokenRepository tokenRepository;
 
+    @Autowired
+    private CollectionRepository collectionRepository;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public AuthenticationService() {
@@ -31,7 +36,6 @@ public class AuthenticationService {
     //Authenticates the user login
     public boolean verifyLogin(Login login) {
         try {
-
             //Verify that username exists
             if (account_login_repository.existsByUsername(login.getUsername())) {
                 Account_Login account_login = account_login_repository.findAccount_LoginByUsername(login.getUsername());
@@ -59,12 +63,25 @@ public class AuthenticationService {
 
                 Account_Details account_details = new Account_Details(login.getAccountDetailsName());
 
-                //Generating random collection token.
-                Collection collection = new Collection(UUID.randomUUID());
+                //Generating unique authenticationtoken
+                UUID authenticationToken = UUID.randomUUID();
+                while (tokenRepository.existsByToken(authenticationToken)) {
+                    authenticationToken = UUID.randomUUID();
+                }
+                Token token = new Token(authenticationToken);
+
+                //Generating unique collection token.
+                UUID collectionToken = UUID.randomUUID();
+                while (collectionRepository.countByCollection_token(collectionToken) > 0) {
+                    collectionToken = UUID.randomUUID();
+                }
+                Collection collection = new Collection(collectionToken);
 
                 account_details.addCollection(collection);
 
                 account_login.addAccount_Details(account_details);
+
+                account_login.addToken(token);
 
                 account_login_repository.save(account_login);
             } else {

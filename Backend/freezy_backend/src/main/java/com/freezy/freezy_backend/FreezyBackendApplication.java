@@ -5,6 +5,7 @@ import com.freezy.freezy_backend.Domain.Services.ItemService;
 import com.freezy.freezy_backend.Persistence.Entities.*;
 import com.freezy.freezy_backend.Persistence.Repositories.Account_Details_Repository;
 import com.freezy.freezy_backend.Persistence.Repositories.Account_Login_Repository;
+import com.freezy.freezy_backend.Persistence.Repositories.CollectionRepository;
 import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,13 @@ public class FreezyBackendApplication {
 
 	//Test method
 	@Bean
-	CommandLineRunner commandLineRunner(Account_Login_Repository account_login_repository, TokenRepository tokenRepository, Account_Details_Repository account_details_repository) {
+	CommandLineRunner commandLineRunner(Account_Login_Repository account_login_repository, TokenRepository tokenRepository, Account_Details_Repository account_details_repository, CollectionRepository collectionRepository) {
 		return args -> {
 
-			createBasicAccount(account_login_repository);
+			//createBasicAccount(account_login_repository);
+
+
+			//System.out.println(collectionRepository.countByCollection_token(UUID.fromString("4d4d9dd0-e6a9-4fed-b5a1-88b94df53a81")));
 
 
 		};
@@ -49,7 +53,7 @@ public class FreezyBackendApplication {
 
 		Account_Login account_login = new Account_Login("TestUser", bCrypt.encode("password"));
 
-		Token token = new Token(accessToken, localDateTime);
+		Token token = new Token(accessToken);
 
 		Account_Details account_details = new Account_Details("TestUserName");
 
