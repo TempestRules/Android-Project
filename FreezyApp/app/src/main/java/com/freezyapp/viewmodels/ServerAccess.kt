@@ -1,10 +1,14 @@
 package com.freezyapp.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import okhttp3.Callback
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.DELETE
@@ -28,10 +32,29 @@ class ServerAccess : ViewModel() {
         return retrofit!!
     }
 
-    init {
+    /*init {
         viewModelScope.launch {
 
         }
+    }*/
+
+    fun createCategory(accessToken: UUID, name: String, color: String){
+        val service = getClient().create(CategoryService::class.java)
+        val call = service.createCategory(accessToken, name, color)
+        return call.enqueue(object:Callback<ResponseBody>, retrofit2.Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if(response != null) {
+                    if(response.code() == 200){
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("createCategoryError","Something went wrong")
+            }
+
+        })
     }
 }
 
