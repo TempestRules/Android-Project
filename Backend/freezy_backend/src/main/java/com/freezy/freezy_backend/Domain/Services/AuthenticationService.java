@@ -9,11 +9,10 @@ import com.freezy.freezy_backend.Persistence.Entities.Token;
 import com.freezy.freezy_backend.Persistence.Repositories.Account_Login_Repository;
 import com.freezy.freezy_backend.Persistence.Repositories.CollectionRepository;
 import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,8 +27,6 @@ public class AuthenticationService {
     @Autowired
     private CollectionRepository collectionRepository;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
     public AuthenticationService() {
     }
 
@@ -41,7 +38,7 @@ public class AuthenticationService {
                 Account_Login account_login = account_login_repository.findAccount_LoginByUsername(login.getUsername());
                 //Verifying username and password.
                 if (account_login.getUsername().equals(login.getUsername())
-                        && bCryptPasswordEncoder.matches(login.getPassword(), account_login.getPassword())) {
+                        && BCrypt.checkpw(login.getPassword(), account_login.getPassword())) {
                     return true;
                 }
             }
@@ -59,7 +56,7 @@ public class AuthenticationService {
             if (!account_login_repository.existsByUsername(login.getUsername())) {
 
                 Account_Login account_login = new Account_Login(login.getUsername(),
-                        bCryptPasswordEncoder.encode(login.getPassword()));
+                        BCrypt.hashpw(login.getPassword(), BCrypt.gensalt()));
 
                 Account_Details account_details = new Account_Details(login.getAccountDetailsName());
 
@@ -96,8 +93,6 @@ public class AuthenticationService {
         return true;
     }
 
-    //TODO
-    //Checks if token exists. If it does, but is expired a new one is created.
     public boolean verifyToken(UUID token) {
         return tokenRepository.existsByToken(token);
     }
