@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/nav_overview">
+
+    <fragment
+        android:id="@+id/nav_overview"
+        android:name="com.freezyapp.activities.ui.items.ItemFragment"
+        android:label="@string/menu_overview"
+        tools:layout="@layout/fragment_item" />
+    <fragment
+        android:id="@+id/nav_storage"
+        android:name="com.freezyapp.activities.ui.storage.StorageFragment"
+        android:label="@string/menu_storage"
+        tools:layout="@layout/fragment_storage" />
+</navigation>
