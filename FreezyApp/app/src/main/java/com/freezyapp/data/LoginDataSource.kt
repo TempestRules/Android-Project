@@ -1,6 +1,7 @@
 package com.freezyapp.data
 
 import com.freezyapp.data.model.LoggedInUser
+import com.freezyapp.data.model.RegisterUser
 import java.io.IOException
 
 /**
@@ -20,5 +21,16 @@ class LoginDataSource {
 
     fun logout() {
         // TODO: revoke authentication
+    }
+
+    fun register(username: String, password: String): Result<RegisterUser> {
+        try {
+            //TODO: handle register user
+            val fakeUser = RegisterUser("Jane Doe")
+            return Result.Success(fakeUser)
+        } catch (e: Throwable) {
+            return Result.Error(IOException("Error register user"))
+        }
+
     }
 }
