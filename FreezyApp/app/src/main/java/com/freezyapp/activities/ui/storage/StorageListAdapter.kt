@@ -1,5 +1,6 @@
 package com.freezyapp.activities.ui.storage
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,10 @@ import android.widget.TextView
 import androidx.constraintlayout.utils.widget.MockView
 import androidx.recyclerview.widget.RecyclerView
 import com.freezyapp.R
+import com.freezyapp.viewmodels.StorageModel
+import com.freezyapp.viewmodels.entities.Storage_Unit
 
-class StorageListAdapter(private val data: List<Void>): RecyclerView.Adapter<StorageListAdapter.ViewHolder>() {
+class StorageListAdapter(private val data: List<Storage_Unit>, private val storageViewModel: StorageModel): RecyclerView.Adapter<StorageListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val editBtn: Button = view.findViewById(R.id.storage_item_edit_btn)
@@ -26,6 +29,12 @@ class StorageListAdapter(private val data: List<Void>): RecyclerView.Adapter<Sto
     override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.itemTitle.text = data[position].getName()
+        holder.itemColor.setBackgroundColor(Color.parseColor(data[position].getColor()))
+        holder.editBtn.setOnClickListener {
+
+        }
+        holder.deleteBtn.setOnClickListener {
+        }
     }
 }
