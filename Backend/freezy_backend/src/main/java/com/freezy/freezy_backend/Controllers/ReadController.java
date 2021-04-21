@@ -5,15 +5,16 @@ import com.freezy.freezy_backend.Domain.Services.AuthenticationService;
 import com.freezy.freezy_backend.Domain.Services.CategoryService;
 import com.freezy.freezy_backend.Domain.Services.ItemService;
 import com.freezy.freezy_backend.Domain.Services.StorageService;
+import com.freezy.freezy_backend.Persistence.Entities.Account_Login;
 import com.freezy.freezy_backend.Persistence.Entities.Category;
 import com.freezy.freezy_backend.Persistence.Entities.Storage_Unit;
+import com.freezy.freezy_backend.Persistence.Repositories.Account_Login_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/Read")
@@ -29,15 +30,18 @@ public class ReadController {
     private CategoryService categoryService;
 
     @Autowired
+    private Account_Login_Repository account_login_repository;
+
+    @Autowired
     private ItemService itemService;
 
     @PostMapping("/Authenticate")
     public ResponseEntity<AuthenticationToken> verifyLogin(@RequestBody Login login) {
         if (authenticationService.verifyLogin(login)) {
-            //TODO: Create/Update AuthenticationToken and return it.
-            AuthenticationToken authenticationToken = new AuthenticationToken();
+            Account_Login accountLogin = account_login_repository.findAccount_LoginByUsername(login.getUsername());
 
-            authenticationToken.setAuthenticationToken(UUID.randomUUID());
+            AuthenticationToken authenticationToken = new AuthenticationToken();
+            authenticationToken.setAuthenticationToken(accountLogin.getToken().getToken());
 
             return new ResponseEntity<>(authenticationToken, HttpStatus.OK);
         } else {
