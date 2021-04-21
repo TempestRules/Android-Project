@@ -1,5 +1,6 @@
 package com.freezyapp.viewmodels
 
+import android.graphics.Color
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -41,11 +42,12 @@ class StorageModel : ViewModel() {
         return retrofit!!
     }
 
-    fun createStorage(accessToken: UUID, name: String){
+    fun createStorage(accessToken: UUID, name: String, color: String){
         val service = getClient().create(StorageService::class.java)
         var sd = StorageData()
         sd.setAccessToken(accessToken)
         sd.setName(name)
+        sd.setColor(color)
         val call = service.createStorage_Unit(sd)
         return call.enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -85,11 +87,11 @@ class StorageModel : ViewModel() {
         })
     }
 
-    fun updateStorage(accessToken: UUID, storageId: Long, updateInfo: Storage_Unit){
+    fun updateStorage(accessToken: UUID, updateInfo: Storage_Unit){
         val service = getClient().create(StorageService::class.java)
         var sd = StorageData()
         sd.setAccessToken(accessToken)
-        sd.setStorageId(storageId)
+        sd.setStorageId(updateInfo.getId())
         sd.setUpdateInfo(updateInfo)
         val call = service.updateStorage_Unit(sd)
         return call.enqueue(object: Callback<Void> {
@@ -106,11 +108,11 @@ class StorageModel : ViewModel() {
         })
     }
 
-    fun deleteStorage(accessToken: UUID, name: String){
+    fun deleteStorage(accessToken: UUID, storageId: Long){
         val service = getClient().create(StorageService::class.java)
         var sd = StorageData()
         sd.setAccessToken(accessToken)
-        sd.setName(name)
+        sd.setStorageId(storageId)
         val call = service.deleteStorage_Unit(sd)
         return call.enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

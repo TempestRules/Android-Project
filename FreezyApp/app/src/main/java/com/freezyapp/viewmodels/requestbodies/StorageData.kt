@@ -8,6 +8,7 @@ class StorageData {
     private var storageId: Long? = null
     private var name: String? = null
     private var updateInfo: Storage_Unit? = null
+    private var color: String? = null
 
     fun getAccessToken(): UUID? {
         return accessToken
@@ -39,5 +40,13 @@ class StorageData {
 
     fun setUpdateInfo(updateInfo: Storage_Unit){
         this.updateInfo = updateInfo
+    }
+
+    fun getColor(): String{
+        return color!!
+    }
+
+    fun setColor(color: String){
+        this.color = color
     }
 }
