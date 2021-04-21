@@ -144,14 +144,3 @@ interface CategoryService {
     fun deleteCategory(@Body categoryData: CategoryData/*accessToken: UUID, categoryId: Long*/): Call<Void>
 }
 
-interface ItemService {
-    @POST("/Create/Item")
-    fun createItem(accessToken: UUID, name: String, expirationDate: LocalDateTime, unit: String, storage_Unit_Id: Long, categoryIds: List<Long>): Call<ResponseBody>
-
-    @GET("/Read/Items")
-    fun getAllItems(accessToken: UUID, storageId: Long): Call<List<ItemData>>
-
-    @DELETE("/Delete/Item")
-    fun deleteItem(accessToken: UUID, itemId: Long): Call<ResponseBody>
-}
-
