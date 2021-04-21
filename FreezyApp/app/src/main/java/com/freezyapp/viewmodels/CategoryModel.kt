@@ -6,15 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.freezyapp.viewmodels.entities.Category
 import com.freezyapp.viewmodels.requestbodies.CategoryData
-import com.freezyapp.viewmodels.requestbodies.ItemData
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import java.time.LocalDateTime
 import java.util.*
 
 class CategoryModel : ViewModel() {
@@ -132,7 +129,7 @@ interface AuthenticationService {
 interface CategoryService {
     //@FormUrlEncoded
     @POST("/Create/Category")
-    fun createCategory(@Body categoryData: CategoryData/*@Field("accessToken") accessToken: UUID,@Field("name") name: String,@Field("color") color: String*/): Call<Void> //Måske unødvendigt med return type
+    fun createCategory(@Body categoryData: CategoryData/*@Field("accessToken") accessToken: UUID,@Field("name") name: String,@Field("color") color: String*/): Call<Void>
 
     @GET("/Read/AllCategories")
     fun getAllCategories(@Body categoryData: CategoryData/*accessToken: UUID*/): Call<List<Category>>
