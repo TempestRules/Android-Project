@@ -66,13 +66,13 @@ class CategoryModel : ViewModel() {
                 if(response != null){
                     if(response.code() == 200){
                         mld.value = response.body()
-                        Log.d("raCat","Successfully read all categories")
+                        Log.d("gaCat","Successfully read all categories")
                     }
                 }
             }
 
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
-                Log.d("raCatError", "Error in reading categories: " + t.message)
+                Log.d("gaCatError", "Error in reading categories: " + t.message)
             }
 
         })
