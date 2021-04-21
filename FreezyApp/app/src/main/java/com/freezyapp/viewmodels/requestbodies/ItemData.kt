@@ -1,4 +1,4 @@
-package com.freezyapp.viewmodels
+package com.freezyapp.viewmodels.requestbodies
 
 import java.time.LocalDateTime
 import java.util.*
