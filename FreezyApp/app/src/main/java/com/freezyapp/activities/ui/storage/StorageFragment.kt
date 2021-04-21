@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import com.freezyapp.R
 import com.freezyapp.activities.ui.storage.fragements.StorageFormFragment
+import com.freezyapp.activities.ui.storage.fragements.StorageListFragment
 
 class StorageFragment : Fragment(R.layout.fragment_storage) {
     lateinit var fragmentContainer: FragmentContainerView
@@ -20,7 +21,7 @@ class StorageFragment : Fragment(R.layout.fragment_storage) {
         fragmentContainer = view.findViewById(R.id.storage_frag_container)
         childFragmentManager.commit {
             setReorderingAllowed(true)
-            replace(R.id.storage_frag_container, StorageFormFragment())
+            replace(R.id.storage_frag_container, StorageListFragment())
             addToBackStack(null)
         }
     }
