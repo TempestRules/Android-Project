@@ -1,9 +1,6 @@
 package com.freezyapp.viewmodels.entities
 
-import android.R.attr.name
-import android.R.id
 import java.time.LocalDateTime
-
 
 class Item {
     private var id: Long = 0
@@ -49,7 +46,7 @@ class Item {
     fun setId(id: Long) {
         this.id = id
     }
-    override fun toString(): String? {
+    override fun toString(): String {
         return "Item{" +
                 "id=" + id +
                 ", name='" + name + '\'' +

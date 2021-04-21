@@ -1,12 +1,9 @@
 package com.freezyapp.viewmodels.entities
 
-import android.R.attr.name
-import android.R.id
-
-
 class Storage_Unit {
     private var id: Long = 0
     private lateinit var name: String
+    private lateinit var color: String
 
     fun Storage_Unit() {}
 
@@ -31,10 +28,19 @@ class Storage_Unit {
         this.id = id
     }
 
-    override fun toString(): String? {
+    fun getColor(): String{
+        return color
+    }
+
+    fun setColor(color: String){
+        this.color = color
+    }
+
+    override fun toString(): String {
         return "Storage_Unit{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
                 '}'
     }
 }

@@ -33,12 +33,6 @@ class CategoryModel : ViewModel() {
         return retrofit!!
     }
 
-    /*init {
-        viewModelScope.launch {
-
-        }
-    }*/
-
     fun createCategory(accessToken: UUID, name: String, color: String){
         val service = getClient().create(CategoryService::class.java)
         var cd = CategoryData()
@@ -72,6 +66,7 @@ class CategoryModel : ViewModel() {
                 if(response != null){
                     if(response.code() == 200){
                         mld.value = response.body()
+                        Log.d("raCat","Successfully read all categories")
                     }
                 }
             }
@@ -93,12 +88,36 @@ class CategoryModel : ViewModel() {
         return call.enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if(response != null){
-                    
+                    if(response.code() == 200){
+                        Log.d("uCat","Updated category")
+                    }
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("uCatError","Error in updating category: " + t.message)
+            }
+
+        })
+    }
+
+    fun deleteCategory(accessToken: UUID, categoryId: Long){
+        val service = getClient().create(CategoryService::class.java)
+        var cd = CategoryData()
+        cd.setAccessToken(accessToken)
+        cd.setCategoryId(categoryId)
+        val call = service.deleteCategory(cd)
+        return call.enqueue(object: Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if(response != null){
+                    if(response.code() == 200){
+                        Log.d("dCat","Deleted category")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d("dCatError","Error in deleting category: " + t.message)
             }
 
         })
@@ -119,10 +138,10 @@ interface CategoryService {
     fun getAllCategories(@Body categoryData: CategoryData/*accessToken: UUID*/): Call<List<Category>>
 
     @PUT("/Update/Category")
-    fun updateCategory(@Body categoryData: CategoryData/*accessToken: UUID, categoryId: Long, color: String*/): Call<ResponseBody> //Maybe just like this????
+    fun updateCategory(@Body categoryData: CategoryData/*accessToken: UUID, categoryId: Long, color: String*/): Call<Void> //Maybe just like this????
 
     @DELETE("/Delete/Category")
-    fun deleteCategory(@Body categoryData: CategoryData/*accessToken: UUID, categoryId: Long*/): Call<ResponseBody>
+    fun deleteCategory(@Body categoryData: CategoryData/*accessToken: UUID, categoryId: Long*/): Call<Void>
 }
 
 interface ItemService {

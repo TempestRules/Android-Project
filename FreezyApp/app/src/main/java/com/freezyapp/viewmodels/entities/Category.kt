@@ -1,10 +1,5 @@
 package com.freezyapp.viewmodels.entities
 
-import android.R.*
-import android.R.attr.name
-import android.content.ClipData.Item
-
-
 class Category {
     private var id: Long = 0
     private lateinit var color: String
