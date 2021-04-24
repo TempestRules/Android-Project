@@ -35,6 +35,13 @@ public class Storage_Unit {
     )
     private String name;
 
+    @Column(
+            name = "storage_unit_color",
+            nullable = false,
+            updatable = true
+    )
+    private String color;
+
     //One to many relationship with Collection
     @ManyToOne
     @JoinColumn(
@@ -58,8 +65,9 @@ public class Storage_Unit {
     public Storage_Unit() {
     }
 
-    public Storage_Unit(String name) {
+    public Storage_Unit(String name, String color) {
         this.name = name;
+        this.color = color;
     }
 
     //Methods to add or remove items. Keeps them both in sync.
@@ -107,6 +115,14 @@ public class Storage_Unit {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     @Override
