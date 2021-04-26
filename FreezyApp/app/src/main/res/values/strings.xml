@@ -11,6 +11,7 @@
     <!-- GENERIC -->
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
 
     <string name="menu_overview">Overview</string>
     <string name="menu_categories">Categories</string>
@@ -20,6 +21,7 @@
 
     <string name="add_storage_btn">Add Storage</string>
     <string name="new_storage_title">New Storage</string>
+    <string name="edit_storage_title">Edit Storage</string>
     <string name="storage_name_hint">Storage Name</string>
     <string name="storage_color_hint">Storage Color</string>
 </resources>

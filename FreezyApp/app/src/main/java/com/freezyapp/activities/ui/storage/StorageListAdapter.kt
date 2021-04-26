@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.utils.widget.MockView
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
 import com.freezyapp.R
+import com.freezyapp.activities.ui.storage.fragements.StorageFormFragment
 import com.freezyapp.viewmodels.StorageModel
 import com.freezyapp.viewmodels.entities.Storage_Unit
 
-class StorageListAdapter(private val data: List<Storage_Unit>, private val storageViewModel: StorageModel): RecyclerView.Adapter<StorageListAdapter.ViewHolder>() {
+class StorageListAdapter(private val data: List<Storage_Unit>, private val storageViewModel: StorageModel, private val fragmentManager: FragmentManager): RecyclerView.Adapter<StorageListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val editBtn: Button = view.findViewById(R.id.storage_item_edit_btn)
@@ -32,9 +35,15 @@ class StorageListAdapter(private val data: List<Storage_Unit>, private val stora
         holder.itemTitle.text = data[position].getName()
         holder.itemColor.setBackgroundColor(Color.parseColor(data[position].getColor()))
         holder.editBtn.setOnClickListener {
-
+            storageViewModel.setCurrentStorageUnit(data[position])
+            fragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.storage_frag_container, StorageFormFragment())
+                addToBackStack(null)
+            }
         }
         holder.deleteBtn.setOnClickListener {
+            storageViewModel.deleteStorage(data[position].getId()!!)
         }
     }
 }
