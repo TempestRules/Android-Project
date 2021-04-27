@@ -4,12 +4,21 @@ class Category {
     private var id: Long = 0
     private lateinit var color: String
     private lateinit var name: String
+    private var currentCategory: Category? = null
 
     fun Category() {}
 
     fun Category(name: String, color: String) {
         this.name = name
         this.color = color
+    }
+
+    fun getCurrentCategory(): Category?{
+        return currentCategory
+    }
+
+    fun setCurrentCategory(category: Category){
+        currentCategory = category
     }
 
     //Getters and setters
