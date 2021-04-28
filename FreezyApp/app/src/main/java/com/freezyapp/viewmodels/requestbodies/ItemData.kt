@@ -9,6 +9,7 @@ class ItemData {
     private var name: String? = null
     private var expirationDate: LocalDateTime? = null
     private var unit: String? = null
+    private var quantity: Double? = null
     private var storage_Unit_Id: Long? = null
     private var categoryIds: List<Long>? = null
 
@@ -18,6 +19,14 @@ class ItemData {
 
     fun setAccessToken(accessToken: UUID?) {
         this.accessToken = accessToken
+    }
+
+    fun getQuantity(): Double? {
+        return quantity
+    }
+
+    fun setQuantity(quantity: Double){
+        this.quantity = quantity
     }
 
     fun getName(): String? {

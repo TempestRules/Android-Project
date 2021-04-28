@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.freezyapp.backend.AccessToken
 import com.freezyapp.viewmodels.entities.Category
 import com.freezyapp.viewmodels.requestbodies.CategoryData
 import retrofit2.Call
@@ -19,6 +20,7 @@ class CategoryModel : ViewModel() {
     private var retrofit: Retrofit? = null
     var mld = MutableLiveData<List<Category>>()
     var liveList: LiveData<List<Category>> = mld
+    private var currentCategory: Category? = null
 
     fun getClient(): Retrofit {
         if(retrofit == null){
@@ -30,10 +32,18 @@ class CategoryModel : ViewModel() {
         return retrofit!!
     }
 
-    fun createCategory(accessToken: UUID, name: String, color: String){
+    fun getCurrentCategory(): Category? {
+        return currentCategory
+    }
+
+    fun setCurrentCategory(category: Category) {
+        currentCategory = category
+    }
+
+    fun createCategory(name: String, color: String){
         val service = getClient().create(CategoryService::class.java)
         var cd = CategoryData()
-        cd.setAccessToken(accessToken)
+        cd.setAccessToken(AccessToken.get())
         cd.setColor(color)
         cd.setName(name)
         val call = service.createCategory(cd/*accessToken, name, color*/)
@@ -53,10 +63,10 @@ class CategoryModel : ViewModel() {
         })
     }
 
-    fun getAllCategories(accessToken: UUID){
+    fun getAllCategories(){
         val service = getClient().create(CategoryService::class.java)
         var cd = CategoryData()
-        cd.setAccessToken(accessToken)
+        cd.setAccessToken(AccessToken.get())
         val call = service.getAllCategories(cd)
         return call.enqueue(object: Callback<List<Category>> {
             override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
@@ -75,10 +85,10 @@ class CategoryModel : ViewModel() {
         })
     }
 
-    fun updateCategory(accessToken: UUID, categoryId: Long, color: String){
+    fun updateCategory(categoryId: Long, color: String){
         val service = getClient().create(CategoryService::class.java)
         var cd = CategoryData()
-        cd.setAccessToken(accessToken)
+        cd.setAccessToken(AccessToken.get())
         cd.setCategoryId(categoryId)
         cd.setColor(color)
         val call = service.updateCategory(cd)
@@ -98,10 +108,10 @@ class CategoryModel : ViewModel() {
         })
     }
 
-    fun deleteCategory(accessToken: UUID, categoryId: Long){
+    fun deleteCategory(categoryId: Long){
         val service = getClient().create(CategoryService::class.java)
         var cd = CategoryData()
-        cd.setAccessToken(accessToken)
+        cd.setAccessToken(AccessToken.get())
         cd.setCategoryId(categoryId)
         val call = service.deleteCategory(cd)
         return call.enqueue(object: Callback<Void> {

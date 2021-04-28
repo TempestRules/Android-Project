@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.freezyapp.backend.AccessToken
 import com.freezyapp.viewmodels.entities.Storage_Unit
 import com.freezyapp.viewmodels.requestbodies.StorageData
 import retrofit2.Call
@@ -25,7 +26,7 @@ class StorageModel : ViewModel() {
         return currentStorage_Unit
     }
 
-    fun setCurrentStorageUnit(storageUnit: Storage_Unit?){
+    fun setCurrentStorageUnit(storageUnit: Storage_Unit?) {
         currentStorage_Unit = storageUnit
     }
 
@@ -39,10 +40,10 @@ class StorageModel : ViewModel() {
         return retrofit!!
     }
 
-    fun createStorage(accessToken: UUID, name: String, color: String){
+    fun createStorage(name: String, color: String){
         val service = getClient().create(StorageService::class.java)
         var sd = StorageData()
-        sd.setAccessToken(accessToken)
+        sd.setAccessToken(AccessToken.get())
         sd.setName(name)
         sd.setColor(color)
         val call = service.createStorage_Unit(sd)
@@ -62,10 +63,10 @@ class StorageModel : ViewModel() {
         })
     }
 
-    fun getAllStorages(accessToken: UUID){
+    fun getAllStorages(){
         val service = getClient().create(StorageService::class.java)
         var sd = StorageData()
-        sd.setAccessToken(accessToken)
+        sd.setAccessToken(AccessToken.get())
         val call = service.getAllStorages(sd)
         return call.enqueue(object: Callback<List<Storage_Unit>> {
             override fun onResponse(call: Call<List<Storage_Unit>>, response: Response<List<Storage_Unit>>) {
@@ -84,10 +85,10 @@ class StorageModel : ViewModel() {
         })
     }
 
-    fun updateStorage(accessToken: UUID, updateInfo: Storage_Unit){
+    fun updateStorage(updateInfo: Storage_Unit){
         val service = getClient().create(StorageService::class.java)
         var sd = StorageData()
-        sd.setAccessToken(accessToken)
+        sd.setAccessToken(AccessToken.get())
         sd.setStorageId(updateInfo.getId())
         sd.setUpdateInfo(updateInfo)
         val call = service.updateStorage_Unit(sd)
@@ -105,10 +106,10 @@ class StorageModel : ViewModel() {
         })
     }
 
-    fun deleteStorage(accessToken: UUID, storageId: Long){
+    fun deleteStorage(storageId: Long){
         val service = getClient().create(StorageService::class.java)
         var sd = StorageData()
-        sd.setAccessToken(accessToken)
+        sd.setAccessToken(AccessToken.get())
         sd.setStorageId(storageId)
         val call = service.deleteStorage_Unit(sd)
         return call.enqueue(object: Callback<Void> {
