@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.freezyapp.backend.AccessToken
 import com.freezyapp.viewmodels.entities.Item
+import com.freezyapp.viewmodels.entities.ItemModelBools
 import com.freezyapp.viewmodels.requestbodies.ItemData
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +26,7 @@ class ItemModel: ViewModel() {
     var mld = MutableLiveData<List<Item>>()
     var liveList: LiveData<List<Item>> = mld
     private var currentItem: Item? = null
+    private val imb = ItemModelBools()
 
     fun getClient(): Retrofit {
         if(retrofit == null){
@@ -70,11 +72,10 @@ class ItemModel: ViewModel() {
         })
     }
 
-    fun getItems(storageId: Long){
+    fun getItems(){
         val service = getClient().create(ItemService::class.java)
         var id = ItemData()
         id.setAccessToken(AccessToken.get())
-        id.setStorage_Unit_Id(storageId)
         val call = service.getAllItems(id)
         return call.enqueue(object: Callback<List<Item>> {
             override fun onResponse(call: Call<List<Item>>, response: Response<List<Item>>) {
@@ -139,6 +140,30 @@ class ItemModel: ViewModel() {
                 Log.d("uItemError", "Error in updating item: " + t.message)
             }
         })
+    }
+ 
+    fun setSortCategory(sortCategory: Boolean){
+        imb.setSortCategory(sortCategory)
+    }
+
+    fun getSortCategory(): Boolean {
+        return imb.getSortCategory()
+    }
+
+    fun setOnlyExpired(onlyExpired: Boolean){
+        imb.setOnlyExpired(onlyExpired)
+    }
+
+    fun getOnlyExpired(): Boolean {
+        return imb.getOnlyExpired()
+    }
+
+    fun setSortStorage(sortStorage: Boolean){
+        imb.setSortStorage(sortStorage)
+    }
+
+    fun getSortStorage(): Boolean {
+        return imb.getSortStorage()
     }
 }
 
