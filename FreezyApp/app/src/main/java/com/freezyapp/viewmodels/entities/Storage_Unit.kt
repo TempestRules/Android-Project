@@ -43,4 +43,9 @@ class Storage_Unit {
                 ", color='" + color + '\'' +
                 '}'
     }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Storage_Unit) return id == other.getId()
+        return false
+    }
 }
