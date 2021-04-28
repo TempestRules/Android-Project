@@ -39,16 +39,17 @@ class ItemModel: ViewModel() {
     fun getCurrentItem(): Item? {
         return currentItem
     }
-    
+
     fun setCurrentItem(item: Item){
         currentItem = item
     }
 
-    fun createItem(name: String, expirationDate: LocalDateTime, unit: String, storage_Unit_Id: Long, categoryIds: List<Long>){
+    fun createItem(name: String, expirationDate: LocalDateTime, unit: String, storage_Unit_Id: Long, quantity: Double, categoryIds: List<Long>){
         val service = getClient().create(ItemService::class.java)
         var id = ItemData()
         id.setAccessToken(AccessToken.get())
         id.setName(name)
+        id.setQuantity(quantity)
         id.setExpirationDate(expirationDate)
         id.setUnit(unit)
         id.setStorage_Unit_Id(storage_Unit_Id)

@@ -5,13 +5,15 @@ import java.time.LocalDateTime
 class Item {
     private var id: Long = 0
     private lateinit var unit: String
+    private var quantity: Double = 0.0
     private lateinit var expiration_date: LocalDateTime
     private lateinit var name: String
 
-    fun Item(name: String, expiration_date: LocalDateTime, unit: String) {
+    fun Item(name: String, expiration_date: LocalDateTime, quantity: Double, unit: String) {
         this.name = name
         this.expiration_date = expiration_date
         this.unit = unit
+        this.quantity = quantity
     }
 
     //Getters and setters
@@ -21,6 +23,14 @@ class Item {
 
     fun setName(name: String) {
         this.name = name
+    }
+
+    fun setQuantity(quantity: Double){
+        this.quantity = quantity
+    }
+
+    fun getQuantity(): Double {
+        return quantity
     }
 
     fun getExpiration_date(): LocalDateTime? {
