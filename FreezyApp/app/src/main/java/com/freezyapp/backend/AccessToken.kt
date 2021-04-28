@@ -3,6 +3,7 @@ package com.freezyapp.backend
 import android.content.Context
 import android.content.SharedPreferences
 import com.freezyapp.R
+import java.util.*
 
 class AccessToken() {
 
@@ -18,13 +19,18 @@ class AccessToken() {
 
         private val pref: SharedPreferences = context.getSharedPreferences(file_key, Context.MODE_PRIVATE)
 
-        fun get(): String? {
-            return pref.getString(token_key, null)
+        fun get(): UUID? {
+            val storedValue = pref.getString(token_key, null)
+            return if (storedValue == null) {
+                null
+            } else {
+                UUID.fromString(storedValue)
+            }
         }
 
-        fun set(accessToken: String) {
+        fun set(accessToken: UUID) {
             with (pref.edit()) {
-                putString(token_key, accessToken)
+                putString(token_key, accessToken.toString())
                 apply()
             }
         }
