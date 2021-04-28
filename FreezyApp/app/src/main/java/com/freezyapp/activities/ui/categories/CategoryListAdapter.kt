@@ -12,11 +12,8 @@ import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
 import com.freezyapp.R
 import com.freezyapp.activities.ui.categories.fragements.CategoryFormFragment
-import com.freezyapp.activities.ui.storage.fragements.StorageFormFragment
 import com.freezyapp.viewmodels.CategoryModel
-import com.freezyapp.viewmodels.StorageModel
 import com.freezyapp.viewmodels.entities.Category
-import com.freezyapp.viewmodels.entities.Storage_Unit
 
 class CategoryListAdapter(private val data: List<Category>, private val categoryViewModel: CategoryModel, private val fragmentManager: FragmentManager): RecyclerView.Adapter<CategoryListAdapter.ViewHolder>() {
 

@@ -11,9 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freezyapp.R
 import com.freezyapp.activities.ui.categories.CategoryListAdapter
-import com.freezyapp.activities.ui.storage.StorageListAdapter
 import com.freezyapp.viewmodels.CategoryModel
-import com.freezyapp.viewmodels.StorageModel
 
 class CategoryListFragment : Fragment(R.layout.category_list_fragment) {
 
