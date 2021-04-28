@@ -44,4 +44,9 @@ class Category {
                 ", color='" + color + '\'' +
                 '}'
     }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Category) return id == other.getId()
+        return false
+    }
 }
