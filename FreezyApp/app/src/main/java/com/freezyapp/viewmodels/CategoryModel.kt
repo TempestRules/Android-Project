@@ -20,6 +20,7 @@ class CategoryModel : ViewModel() {
     private var retrofit: Retrofit? = null
     var mld = MutableLiveData<List<Category>>()
     var liveList: LiveData<List<Category>> = mld
+    private var currentCategory: Category? = null
 
     fun getClient(): Retrofit {
         if(retrofit == null){
@@ -29,6 +30,14 @@ class CategoryModel : ViewModel() {
                     .build()
         }
         return retrofit!!
+    }
+
+    fun getCurrentCategory(): Category? {
+        return currentCategory
+    }
+
+    fun setCurrentCategory(category: Category) {
+        currentCategory = category
     }
 
     fun createCategory(name: String, color: String){

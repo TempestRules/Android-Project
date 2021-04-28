@@ -20,6 +20,6 @@ class Test : AppCompatActivity() {
 
     fun main(){
         var access = CategoryModel()
-        access.createCategory(UUID.fromString("784b1bf7-0b9b-4d6e-a588-bbcece388ad2"/*"425283d7-382f-4bb0-a772-95ddc0f5117d"*/), "Egon", "Yellow")
+        access.createCategory("Egon", "Yellow")
     }
 }

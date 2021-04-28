@@ -26,7 +26,7 @@ class StorageModel : ViewModel() {
         return currentStorage_Unit
     }
 
-    fun setCurrentStorageUnit(storageUnit: Storage_Unit?){
+    fun setCurrentStorageUnit(storageUnit: Storage_Unit?) {
         currentStorage_Unit = storageUnit
     }
 

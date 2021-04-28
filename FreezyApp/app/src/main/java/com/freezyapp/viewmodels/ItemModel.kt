@@ -24,6 +24,7 @@ class ItemModel: ViewModel() {
     private var retrofit: Retrofit? = null
     var mld = MutableLiveData<List<Item>>()
     var liveList: LiveData<List<Item>> = mld
+    private var currentItem: Item? = null
 
     fun getClient(): Retrofit {
         if(retrofit == null){
@@ -33,6 +34,14 @@ class ItemModel: ViewModel() {
                     .build()
         }
         return retrofit!!
+    }
+
+    fun getCurrentItem(): Item? {
+        return currentItem
+    }
+    
+    fun setCurrentItem(item: Item){
+        currentItem = item
     }
 
     fun createItem(name: String, expirationDate: LocalDateTime, unit: String, storage_Unit_Id: Long, categoryIds: List<Long>){
