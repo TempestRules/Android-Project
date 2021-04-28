@@ -4,21 +4,29 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.freezyapp.R
 
-class AccessToken(val activity: Context) {
+class AccessToken() {
 
-    private val file_key: String = activity.getString(R.string.preference_file_key)
-    private val token_key: String = activity.getString(R.string.preference_access_token_key)
+    companion object {
+        private lateinit var context: Context;
 
-    private val pref: SharedPreferences = activity.getSharedPreferences(file_key, Context.MODE_PRIVATE)
+        fun setContext(context: Context) {
+            AccessToken.context = context
+        }
 
-    fun get(): String? {
-        return pref.getString(token_key, null)
-    }
+        private const val file_key: String = "AccessTokenFile"
+        private const val token_key: String = "AccessToken"
 
-    fun set(accessToken: String) {
-        with (pref.edit()) {
-            putString(token_key, accessToken)
-            apply()
+        private val pref: SharedPreferences = context.getSharedPreferences(file_key, Context.MODE_PRIVATE)
+
+        fun get(): String? {
+            return pref.getString(token_key, null)
+        }
+
+        fun set(accessToken: String) {
+            with (pref.edit()) {
+                putString(token_key, accessToken)
+                apply()
+            }
         }
     }
 }
