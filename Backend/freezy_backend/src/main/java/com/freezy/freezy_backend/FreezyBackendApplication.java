@@ -70,7 +70,7 @@ public class FreezyBackendApplication {
 
 		Storage_Unit storage_unit = new Storage_Unit("Freezer", "Blue");
 
-		Item item = new Item("Oksekød", localDateTime, "500 grams");
+		Item item = new Item("Oksekød", localDateTime, "500 grams", 1);
 
 		Category category = new Category("Meat", "Red");
 

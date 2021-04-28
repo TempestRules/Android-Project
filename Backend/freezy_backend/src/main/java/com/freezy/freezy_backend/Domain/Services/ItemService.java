@@ -41,7 +41,7 @@ public class ItemService {
                 Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
 
                 //Creating and adding item to selected storage_unit
-                Item item = new Item(itemBody.getName(), itemBody.getExpirationDate(), itemBody.getUnit());
+                Item item = new Item(itemBody.getName(), itemBody.getExpirationDate(), itemBody.getUnit(), itemBody.getQuantity());
 
                 //Adding categories to item
                 for (Long categoryId : itemBody.getCategoryIds()) {
@@ -76,6 +76,9 @@ public class ItemService {
                 }
                 if (itemBody.getUnit() != null) {
                     item.setUnit(itemBody.getUnit());
+                }
+                if (itemBody.getQuantity() != null) {
+                    item.setQuantity(item.getQuantity());
                 }
                 if (itemBody.getStorage_Unit_Id() != null) {
                     //Removing item from old storage unit
@@ -132,7 +135,7 @@ public class ItemService {
 
             Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
             for (Item item: storage_unit.getItems()) {
-                ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit());
+                ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit(), item.getQuantity());
                 //Adding all category id's
                 List<Long> categoryIds = new ArrayList<>();
                 for (Category category: item.getCategories()) {

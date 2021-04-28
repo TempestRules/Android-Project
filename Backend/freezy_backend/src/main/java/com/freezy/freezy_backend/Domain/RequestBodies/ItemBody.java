@@ -11,6 +11,7 @@ public class ItemBody {
     private String name;
     private LocalDateTime expirationDate;
     private String unit;
+    private Double quantity;
     private Long storage_Unit_Id;
     private List<Long> categoryIds;
 
@@ -68,5 +69,13 @@ public class ItemBody {
 
     public void setItemId(Long itemId) {
         this.itemId = itemId;
+    }
+
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
     }
 }
