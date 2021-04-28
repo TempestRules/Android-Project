@@ -8,6 +8,8 @@ class Item {
     private var quantity: Double = 0.0
     private lateinit var expiration_date: LocalDateTime
     private lateinit var name: String
+    private lateinit var categoryIds: List<Long>
+    private var storage_unit_id: Long = 0
 
     fun Item(name: String, expiration_date: LocalDateTime, quantity: Double, unit: String) {
         this.name = name
@@ -23,6 +25,22 @@ class Item {
 
     fun setName(name: String) {
         this.name = name
+    }
+
+    fun setCategory(categoryIds: List<Long>){
+        this.categoryIds = categoryIds
+    }
+
+    fun getCategoryIds(): List<Long> {
+        return categoryIds
+    }
+
+    fun setStorageUnitId(storage_unit_id: Long){
+        this.storage_unit_id = storage_unit_id
+    }
+
+    fun getStorageUnitId(): Long {
+        return storage_unit_id
     }
 
     fun setQuantity(quantity: Double){

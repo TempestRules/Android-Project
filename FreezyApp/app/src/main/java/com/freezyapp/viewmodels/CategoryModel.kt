@@ -85,12 +85,13 @@ class CategoryModel : ViewModel() {
         })
     }
 
-    fun updateCategory(categoryId: Long, color: String){
+    fun updateCategory(updateInfo: Category){
         val service = getClient().create(CategoryService::class.java)
         var cd = CategoryData()
         cd.setAccessToken(AccessToken.get())
-        cd.setCategoryId(categoryId)
-        cd.setColor(color)
+        cd.setCategoryId(updateInfo.getId())
+        cd.setColor(updateInfo.getColor())
+        cd.setName(updateInfo.getName())
         val call = service.updateCategory(cd)
         return call.enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
