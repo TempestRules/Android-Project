@@ -80,6 +80,8 @@ class Item {
                 ", name='" + name + '\'' +
                 ", expiration_date=" + expiration_date +
                 ", unit='" + unit + '\'' +
+                ", categoryIds" + categoryIds + '\'' +
+                ", Storage_Unit_Id" + storage_unit_id + '\'' +
                 '}'
     }
 }
