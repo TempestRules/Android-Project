@@ -39,7 +39,7 @@ public class StorageService {
                             .getCollections().get(0).getId());
 
                     //Creating and adding the new Storage_Unit to the collection.
-                    Storage_Unit storage_unit = new Storage_Unit(storage.getName());
+                    Storage_Unit storage_unit = new Storage_Unit(storage.getName(), storage.getColor());
                     collection.addStorage_Unit(storage_unit);
 
                     collectionRepository.save(collection);
@@ -59,6 +59,7 @@ public class StorageService {
             if (authenticationService.verifyToken(storage.getAccessToken())) {
                 Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitById(storage.getStorageId());
                 storage_unit.setName(storage.getName());
+                storage_unit.setColor(storage.getColor());
                 storage_unit_repository.save(storage_unit);
             }
         } catch (Exception e) {
@@ -85,7 +86,7 @@ public class StorageService {
                     .getCollections().get(0).getId());
 
             for (Storage_Unit storage_unit: collection.getStorage_units()) {
-                Storage_Unit newStorageUnit = new Storage_Unit(storage_unit.getName());
+                Storage_Unit newStorageUnit = new Storage_Unit(storage_unit.getName(), storage_unit.getColor());
                 newStorageUnit.setId(storage_unit.getId());
 
                 storage_units.add(newStorageUnit);

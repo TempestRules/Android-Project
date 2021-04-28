@@ -7,6 +7,7 @@ public class Storage {
     private UUID accessToken;
     private Long storageId;
     private String name;
+    private String color;
 
     public UUID getAccessToken() {
         return accessToken;
@@ -30,5 +31,13 @@ public class Storage {
 
     public void setStorageId(Long storageId) {
         this.storageId = storageId;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

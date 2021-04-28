@@ -2,7 +2,6 @@ package com.freezy.freezy_backend.Persistence.Entities;
 
 import javax.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -35,14 +34,6 @@ public class Token {
     )
     private UUID token;
 
-    @Column(
-            name = "date",
-            nullable = false,
-            updatable = false,
-            columnDefinition = "TIMESTAMP WITHOUT TIME ZONE"
-    )
-    private LocalDateTime date;
-
     //One to one relationship with Account_Login
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(
@@ -57,9 +48,8 @@ public class Token {
     public Token() {
     }
 
-    public Token(UUID token, LocalDateTime date) {
+    public Token(UUID token) {
         this.token = token;
-        this.date = date;
     }
 
     //Getters and setters
@@ -80,14 +70,6 @@ public class Token {
         this.token = token;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
     public Account_Login getAccount_login() {
         return account_login;
     }
@@ -101,7 +83,6 @@ public class Token {
         return "Token{" +
                 "id=" + id +
                 ", token=" + token +
-                ", date=" + date +
                 ", account_login=" + account_login +
                 '}';
     }
