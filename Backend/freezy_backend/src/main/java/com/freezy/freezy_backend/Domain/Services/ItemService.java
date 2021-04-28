@@ -133,20 +133,26 @@ public class ItemService {
         try {
             List<ItemReturnBody> items = new ArrayList<>();
 
-            Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
-            for (Item item: storage_unit.getItems()) {
-                ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit(), item.getQuantity());
-                //Adding all category id's
-                List<Long> categoryIds = new ArrayList<>();
-                for (Category category: item.getCategories()) {
-                    categoryIds.add(category.getId());
-                }
-                newItem.setCategoryIds(categoryIds);
+            Token token = tokenRepository.getTokenByToken(itemBody.getAccessToken());
+            Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
+                    .getCollections().get(0).getId());
 
-                items.add(newItem);
+            for (Storage_Unit storage_unit: collection.getStorage_units()) {
+                for (Item item: storage_unit.getItems()) {
+                    ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit(), item.getQuantity());
+                    //Adding all category id's
+                    List<Long> categoryIds = new ArrayList<>();
+                    for (Category category : item.getCategories()) {
+                        categoryIds.add(category.getId());
+                    }
+                    newItem.setCategoryIds(categoryIds);
+
+                    items.add(newItem);
+                }
             }
 
             return items;
+
         } catch (Exception e) {
             System.out.println("GetAllItemsException EXCEPTION: " + e);
         }
