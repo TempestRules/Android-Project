@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.freezyapp.backend.AccessToken
 import com.freezyapp.viewmodels.entities.Item
 import com.freezyapp.viewmodels.requestbodies.ItemData
 import retrofit2.Call
@@ -34,10 +35,10 @@ class ItemModel: ViewModel() {
         return retrofit!!
     }
 
-    fun createItem(accessToken: UUID, name: String, expirationDate: LocalDateTime, unit: String, storage_Unit_Id: Long, categoryIds: List<Long>){
+    fun createItem(name: String, expirationDate: LocalDateTime, unit: String, storage_Unit_Id: Long, categoryIds: List<Long>){
         val service = getClient().create(ItemService::class.java)
         var id = ItemData()
-        id.setAccessToken(accessToken)
+        id.setAccessToken(AccessToken.get())
         id.setName(name)
         id.setExpirationDate(expirationDate)
         id.setUnit(unit)
@@ -59,10 +60,10 @@ class ItemModel: ViewModel() {
         })
     }
 
-    fun getItems(accessToken: UUID, storageId: Long){
+    fun getItems(storageId: Long){
         val service = getClient().create(ItemService::class.java)
         var id = ItemData()
-        id.setAccessToken(accessToken)
+        id.setAccessToken(AccessToken.get())
         id.setStorage_Unit_Id(storageId)
         val call = service.getAllItems(id)
         return call.enqueue(object: Callback<List<Item>> {
@@ -81,10 +82,10 @@ class ItemModel: ViewModel() {
         })
     }
 
-    fun deleteItem(accessToken: UUID, itemId: Long){
+    fun deleteItem(itemId: Long){
         val service = getClient().create(ItemService::class.java)
         var id = ItemData()
-        id.setAccessToken(accessToken)
+        id.setAccessToken(AccessToken.get())
         id.setItemId(itemId)
         val call = service.deleteItem(id)
         return call.enqueue(object: Callback<Void> {
