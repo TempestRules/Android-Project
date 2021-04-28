@@ -141,7 +141,7 @@ class ItemModel: ViewModel() {
             }
         })
     }
- 
+
     fun setSortCategory(sortCategory: Boolean){
         imb.setSortCategory(sortCategory)
     }

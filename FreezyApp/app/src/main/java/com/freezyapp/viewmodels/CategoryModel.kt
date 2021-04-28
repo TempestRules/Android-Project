@@ -36,7 +36,7 @@ class CategoryModel : ViewModel() {
         return currentCategory
     }
 
-    fun setCurrentCategory(category: Category) {
+    fun setCurrentCategory(category: Category?) {
         currentCategory = category
     }
 
