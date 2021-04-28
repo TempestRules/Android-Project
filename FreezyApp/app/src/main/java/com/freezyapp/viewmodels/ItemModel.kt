@@ -40,7 +40,7 @@ class ItemModel: ViewModel() {
         return currentItem
     }
 
-    fun setCurrentItem(item: Item){
+    fun setCurrentItem(item: Item?){
         currentItem = item
     }
 
@@ -113,6 +113,33 @@ class ItemModel: ViewModel() {
 
         })
     }
+
+    fun updateItem(updateInfo: Item){
+        val service = getClient().create(ItemService::class.java)
+        var id = ItemData()
+        id.setAccessToken(AccessToken.get())
+        id.setQuantity(updateInfo.getQuantity())
+        id.setItemId(updateInfo.getId())
+        id.setStorage_Unit_Id(updateInfo.getStorageUnitId())
+        id.setCategoryIds(updateInfo.getCategoryIds())
+        id.setUnit(updateInfo.getUnit())
+        id.setExpirationDate(updateInfo.getExpiration_date())
+        id.setName(updateInfo.getName())
+        val call = service.updateItem(id)
+        return call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if(response != null){
+                    if(response.code() == 200) {
+                        Log.d("uItem", "Updated item successfully")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d("uItemError", "Error in updating item: " + t.message)
+            }
+        })
+    }
 }
 
 interface ItemService {
@@ -124,4 +151,7 @@ interface ItemService {
 
     @DELETE("/Delete/Item")
     fun deleteItem(@Body id: ItemData/*accessToken: UUID, itemId: Long*/): Call<Void>
+
+    @POST("/Update/Item")
+    fun updateItem(@Body id: ItemData): Call<Void>
 }
