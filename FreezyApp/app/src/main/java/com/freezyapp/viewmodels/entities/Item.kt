@@ -6,7 +6,7 @@ class Item {
     private var id: Long = 0
     private lateinit var unit: String
     private var quantity: Double = 0.0
-    private lateinit var expiration_date: LocalDateTime
+    private var expiration_date: LocalDateTime? = null
     private lateinit var name: String
     private lateinit var categoryIds: List<Long>
     private var storage_unit_id: Long = 0
@@ -55,7 +55,7 @@ class Item {
         return expiration_date
     }
 
-    fun setExpiration_date(expiration_date: LocalDateTime) {
+    fun setExpiration_date(expiration_date: LocalDateTime?) {
         this.expiration_date = expiration_date
     }
 
