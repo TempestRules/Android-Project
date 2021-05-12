@@ -1,6 +1,7 @@
 package com.freezy.freezy_backend.Domain.Services;
 
 import com.freezy.freezy_backend.Domain.RequestBodies.CategoryBody;
+import com.freezy.freezy_backend.Domain.RequestBodies.ItemBody;
 import com.freezy.freezy_backend.Persistence.Entities.*;
 import com.freezy.freezy_backend.Persistence.Repositories.CategoryRepository;
 import com.freezy.freezy_backend.Persistence.Repositories.CollectionRepository;
@@ -25,6 +26,9 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ItemService itemService;
 
     public CategoryService() {
     }
@@ -85,7 +89,13 @@ public class CategoryService {
                 //Deleting every reference to every item in every storage unit
                 for (Storage_Unit storage_unit : collection.getStorage_units()) {
                     for (Item item : storage_unit.getItems()) {
-                        item.removeCategoryFromItem(category);
+                        if (item.getCategories().contains(category)) {
+                            //item.removeCategoryFromItem(category);
+                            ItemBody itemBody = new ItemBody();
+                            itemBody.setAccessToken(categoryBody.getAccessToken());
+                            itemBody.setItemId(item.getId());
+                            itemService.deleteItem(itemBody);
+                        }
                     }
                 }
                 //Deleting every reference to Collection

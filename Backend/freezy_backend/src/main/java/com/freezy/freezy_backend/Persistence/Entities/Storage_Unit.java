@@ -127,11 +127,13 @@ public class Storage_Unit {
 
     @Override
     public String toString() {
-        return "Storage_Unit{" +
+        String s = "Storage_Unit{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", collection=" + collection +
-                ", items=" + items +
-                '}';
+                ", collection=" + collection.getId();
+        for (Item item: items) {
+            s += item.getId() + " " + item.getName() + " " + item.getUnit() + " " + item.getExpiration_date();
+        }
+        return s;
     }
 }

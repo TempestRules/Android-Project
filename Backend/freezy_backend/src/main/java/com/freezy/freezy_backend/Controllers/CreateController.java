@@ -63,7 +63,6 @@ public class CreateController {
 
     @PostMapping("/Item")
     public ResponseEntity<?> addItem(@RequestBody ItemBody itemBody) {
-        System.out.println(itemBody.toString());
         if (itemService.createItem(itemBody)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
