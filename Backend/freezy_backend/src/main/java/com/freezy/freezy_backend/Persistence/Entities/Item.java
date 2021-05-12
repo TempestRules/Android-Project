@@ -52,6 +52,13 @@ public class Item {
     )
     private String unit;
 
+    @Column(
+            name = "quantity",
+            updatable = true,
+            nullable = false
+    )
+    private Double quantity;
+
     //One to many relationship with Storage_Unit
     @ManyToOne
     @JoinColumn(
@@ -84,10 +91,11 @@ public class Item {
     public Item() {
     }
 
-    public Item(String name, LocalDateTime expiration_date, String unit) {
+    public Item(String name, LocalDateTime expiration_date, String unit, double quantity) {
         this.name = name;
         this.expiration_date = expiration_date;
         this.unit = unit;
+        this.quantity = quantity;
     }
 
     //Keeps items and categories synced both ways.
@@ -147,6 +155,14 @@ public class Item {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
     }
 
     @Override

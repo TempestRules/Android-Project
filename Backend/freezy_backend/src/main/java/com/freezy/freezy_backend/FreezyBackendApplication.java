@@ -51,12 +51,7 @@ public class FreezyBackendApplication {
 	CommandLineRunner commandLineRunner(Account_Login_Repository account_login_repository, TokenRepository tokenRepository, Account_Details_Repository account_details_repository, CollectionRepository collectionRepository) {
 		return args -> {
 
-			//createBasicAccount(account_login_repository);
-
-
-			//System.out.println(collectionRepository.countByCollection_token(UUID.fromString("4d4d9dd0-e6a9-4fed-b5a1-88b94df53a81")));
-
-
+			createBasicAccount(account_login_repository);
 		};
 	}
 
@@ -73,9 +68,9 @@ public class FreezyBackendApplication {
 
 		Collection collection = new Collection(UUID.randomUUID());
 
-		Storage_Unit storage_unit = new Storage_Unit("Freezer");
+		Storage_Unit storage_unit = new Storage_Unit("Freezer", "Blue");
 
-		Item item = new Item("Oksekød", localDateTime, "500 grams");
+		Item item = new Item("Oksekød", localDateTime, "500 grams", 1);
 
 		Category category = new Category("Meat", "Red");
 

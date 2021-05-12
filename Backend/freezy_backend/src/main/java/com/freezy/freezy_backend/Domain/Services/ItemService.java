@@ -41,7 +41,7 @@ public class ItemService {
                 Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
 
                 //Creating and adding item to selected storage_unit
-                Item item = new Item(itemBody.getName(), itemBody.getExpirationDate(), itemBody.getUnit());
+                Item item = new Item(itemBody.getName(), itemBody.getExpirationDate(), itemBody.getUnit(), itemBody.getQuantity());
 
                 //Adding categories to item
                 for (Long categoryId : itemBody.getCategoryIds()) {
@@ -76,6 +76,9 @@ public class ItemService {
                 }
                 if (itemBody.getUnit() != null) {
                     item.setUnit(itemBody.getUnit());
+                }
+                if (itemBody.getQuantity() != null) {
+                    item.setQuantity(item.getQuantity());
                 }
                 if (itemBody.getStorage_Unit_Id() != null) {
                     //Removing item from old storage unit
@@ -130,20 +133,26 @@ public class ItemService {
         try {
             List<ItemReturnBody> items = new ArrayList<>();
 
-            Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
-            for (Item item: storage_unit.getItems()) {
-                ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit());
-                //Adding all category id's
-                List<Long> categoryIds = new ArrayList<>();
-                for (Category category: item.getCategories()) {
-                    categoryIds.add(category.getId());
-                }
-                newItem.setCategoryIds(categoryIds);
+            Token token = tokenRepository.getTokenByToken(itemBody.getAccessToken());
+            Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
+                    .getCollections().get(0).getId());
 
-                items.add(newItem);
+            for (Storage_Unit storage_unit: collection.getStorage_units()) {
+                for (Item item: storage_unit.getItems()) {
+                    ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit(), item.getQuantity());
+                    //Adding all category id's
+                    List<Long> categoryIds = new ArrayList<>();
+                    for (Category category : item.getCategories()) {
+                        categoryIds.add(category.getId());
+                    }
+                    newItem.setCategoryIds(categoryIds);
+
+                    items.add(newItem);
+                }
             }
 
             return items;
+
         } catch (Exception e) {
             System.out.println("GetAllItemsException EXCEPTION: " + e);
         }

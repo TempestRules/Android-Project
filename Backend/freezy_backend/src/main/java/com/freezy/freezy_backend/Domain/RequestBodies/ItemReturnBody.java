@@ -8,12 +8,14 @@ public class ItemReturnBody {
     private String id;
     private LocalDateTime expirationDate;
     private String unit;
+    private Double quantity;
     private List<Long> categoryIds;
 
-    public ItemReturnBody(String id, LocalDateTime expirationDate, String unit) {
+    public ItemReturnBody(String id, LocalDateTime expirationDate, String unit, Double quantity) {
         this.id = id;
         this.expirationDate = expirationDate;
         this.unit = unit;
+        this.quantity = quantity;
     }
 
     public String getId() {
@@ -46,5 +48,13 @@ public class ItemReturnBody {
 
     public void setCategoryIds(List<Long> categoryIds) {
         this.categoryIds = categoryIds;
+    }
+
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
     }
 }
