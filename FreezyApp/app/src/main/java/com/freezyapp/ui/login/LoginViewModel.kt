@@ -1,55 +1,106 @@
-package com.freezyapp.ui.login
+package com.example.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
-import com.freezyapp.data.LoginRepository
-import com.freezyapp.data.Result
+import com.freezyapp.viewmodels.entities.Login
+import com.freezyapp.viewmodels.requestbodies.LoginData
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.POST
 
-import com.freezyapp.R
+class LoginViewModel : ViewModel() {
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+    val BASE_URL = "http://10.0.2.2:8080"
+    private var retrofit: Retrofit? = null
+    var mld = MutableLiveData<String>()
 
-    private val _loginForm = MutableLiveData<LoginFormState>()
-    val loginFormState: LiveData<LoginFormState> = _loginForm
+    var username: String? = null
+    var password: String? = null
+    var password2: String? = null
+    var name: String? = "enter name"
 
-    private val _loginResult = MutableLiveData<LoginResult>()
-    val loginResult: LiveData<LoginResult> = _loginResult
+    init{
+        Log.i("RegistrationViewModel", "RegistrationViewModel created")
+    }
 
-    fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
+    fun getClient(): Retrofit {
+        if(retrofit == null){
+            retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
+        return retrofit!!
+    }
 
-        if (result is Result.Success) {
-            _loginResult.value =
-                LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+    override fun onCleared() {
+        super.onCleared()
+        Log.i("RegistrationViewModel", "RegistrationViewModel destroyed")
+    }
+
+    fun createAccount(){
+        if (password == password2) {
+            val service = getClient().create(LoginService::class.java)
+            var id = LoginData()
+            id.setUsername(username)
+            id.setPassword(password)
+            id.setName(name)
+
+            val call = service.createAccount(id)
+            return call.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response != null) {
+                        if (response.code() == 201) {
+                            Log.d("cAccount", "Created account successfully")
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.d("cAccountError", "Error in creating account: " + t.message)
+                }
+            })
         } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
+
         }
     }
 
-    fun loginDataChanged(username: String, password: String) {
-        if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
-        } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
-        }
+    fun login(){
+        val service = getClient().create(LoginService::class.java)
+        var id = LoginData()
+        id.setUsername(username)
+        id.setPassword(password)
+
+        val call = service.login(id)
+        return call.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if(response != null){
+                    if(response.code() == 200){
+                        mld.value = response.body()
+                        Log.d("login", "login successfully")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("loginError", "Error in login: " + t.message)
+            }
+
+        })
     }
 
-    // A placeholder username validation check
-    private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains('@')) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }
+    interface LoginService {
+        @POST("/Create/Signup")
+        fun createAccount(@Body id: LoginData): Call<Void>
+
+        @POST("/Read/Authenticate")
+        fun login(@Body id: LoginData): Call<String>
     }
 
-    // A placeholder password validation check
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
-    }
 }
