@@ -6,16 +6,26 @@ import java.util.List;
 public class ItemReturnBody {
 
     private String id;
-    private LocalDateTime expirationDate;
+    private String expirationDate;
     private String unit;
     private Double quantity;
+    private Long storage_unit_id;
     private List<Long> categoryIds;
 
-    public ItemReturnBody(String id, LocalDateTime expirationDate, String unit, Double quantity) {
+    public ItemReturnBody(String id, String expirationDate, String unit, Double quantity, Long storage_unit_id) {
         this.id = id;
         this.expirationDate = expirationDate;
         this.unit = unit;
         this.quantity = quantity;
+        this.storage_unit_id = storage_unit_id;
+    }
+
+    public Long getStorage_unit_id() {
+        return storage_unit_id;
+    }
+
+    public void setStorage_unit_id(Long storage_unit_id) {
+        this.storage_unit_id = storage_unit_id;
     }
 
     public String getId() {
@@ -26,11 +36,11 @@ public class ItemReturnBody {
         this.id = id;
     }
 
-    public LocalDateTime getExpirationDate() {
+    public String getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
+    public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 

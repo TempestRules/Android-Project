@@ -35,30 +35,64 @@ public class ItemService {
     }
 
     public boolean createItem(ItemBody itemBody) {
+        System.out.println(1);
         try {
+            System.out.println(2);
             if (authenticationService.verifyToken(itemBody.getAccessToken())) {
+                System.out.println(3);
 
                 Storage_Unit storage_unit = storage_unit_repository.findStorage_UnitByIdWithItems(itemBody.getStorage_Unit_Id());
+
+                System.out.println(4);
+
+                if (storage_unit == null) {
+                    System.out.println(5);
+                    storage_unit = storage_unit_repository.findStorage_UnitById(itemBody.getStorage_Unit_Id());
+                    storage_unit.setItems(new ArrayList<>());
+                    System.out.println(6);
+                    storage_unit = storage_unit_repository.save(storage_unit);
+                    System.out.println(storage_unit.toString());
+                }
 
                 //Creating and adding item to selected storage_unit
                 Item item = new Item(itemBody.getName(), itemBody.getExpirationDate(), itemBody.getUnit(), itemBody.getQuantity());
 
+                System.out.println(7);
+
                 //Adding categories to item
                 for (Long categoryId : itemBody.getCategoryIds()) {
+                    System.out.println(8);
                     Category category = categoryRepository.findCategoryByIdWithItems(categoryId);
+
+                    if (category == null) {
+                        System.out.println("CATEGORY IF");
+                        category = categoryRepository.findCategoryById(categoryId);
+                        category.setItems(new ArrayList<>());
+                        category = categoryRepository.save(category);
+                        System.out.println("CATEGORY SAVED");
+                        System.out.println(category.toString());
+                    }
 
                     item.addCategoryToItem(category);
                 }
 
+                System.out.println(9);
+
                 storage_unit.addItem(item);
 
+                System.out.println(10);
+
                 storage_unit_repository.save(storage_unit);
+
+                System.out.println(11);
 
                 return true;
             }
         } catch (Exception e) {
+            System.out.println(12);
             System.out.println("CreateItem EXCEPTION: " + e);
         }
+        System.out.println(13);
         return false;
     }
 
@@ -139,7 +173,7 @@ public class ItemService {
 
             for (Storage_Unit storage_unit: collection.getStorage_units()) {
                 for (Item item: storage_unit.getItems()) {
-                    ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit(), item.getQuantity());
+                    ItemReturnBody newItem = new ItemReturnBody(item.getName(), item.getExpiration_date(), item.getUnit(), item.getQuantity(), storage_unit.getId());
                     //Adding all category id's
                     List<Long> categoryIds = new ArrayList<>();
                     for (Category category : item.getCategories()) {

@@ -49,7 +49,7 @@ public class ReadController {
         }
     }
 
-    @GetMapping("/AccountDetails")
+    @PostMapping("/AccountDetails")
     public ResponseEntity<AccountDetails> getAccountDetails(@RequestBody AuthenticationToken authenticationToken) {
         if (authenticationService.verifyToken(authenticationToken.getAuthenticationToken())) {
             AccountDetails accountDetails = authenticationService.getAccountDetails(authenticationToken.getAuthenticationToken());
@@ -59,7 +59,7 @@ public class ReadController {
         }
     }
 
-    @GetMapping("/AllStorages")
+    @PostMapping("/AllStorages")
     public ResponseEntity<List<Storage_Unit>> getAllStorage_Units(@RequestBody Storage storage) {
         if (authenticationService.verifyToken(storage.getAccessToken())) {
             List<Storage_Unit> storage_units = storageService.getAllStorages(storage);
@@ -69,7 +69,7 @@ public class ReadController {
         }
     }
 
-    @GetMapping("/AllCategories")
+    @PostMapping("/AllCategories")
     public ResponseEntity<List<Category>> getAllCategories(@RequestBody CategoryBody categoryBody) {
         if (authenticationService.verifyToken(categoryBody.getAccessToken())) {
             List<Category> categories = categoryService.getAllCategories(categoryBody);
@@ -79,7 +79,7 @@ public class ReadController {
         }
     }
 
-    @GetMapping("/Items")
+    @PostMapping("/Items")
     public ResponseEntity<List<ItemReturnBody>> getAllItems(@RequestBody ItemBody itemBody) {
         if (authenticationService.verifyToken(itemBody.getAccessToken())) {
             List<ItemReturnBody> items = itemService.getAllItems(itemBody);
