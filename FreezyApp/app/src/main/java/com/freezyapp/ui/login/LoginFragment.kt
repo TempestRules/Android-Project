@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.freezyapp.R
+import com.freezyapp.backend.AccessToken
 import com.freezyapp.databinding.LoginFragmentBinding
 
 class LoginFragment : Fragment() {
@@ -50,6 +51,8 @@ class LoginFragment : Fragment() {
 
         viewModel.login()
 
+        AccessToken.setContext(requireActivity().applicationContext)
+        AccessToken.set(viewModel.mld.value!!)
     }
 
 }

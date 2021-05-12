@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.freezyapp.backend.AccessToken
 import com.freezyapp.viewmodels.entities.Login
 import com.freezyapp.viewmodels.requestbodies.LoginData
 import retrofit2.Call
@@ -13,12 +14,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
+import java.util.*
 
 class LoginViewModel : ViewModel() {
 
     val BASE_URL = "http://10.0.2.2:8080"
     private var retrofit: Retrofit? = null
-    var mld = MutableLiveData<String>()
+    var mld = MutableLiveData<UUID>()
 
     var username: String? = null
     var password: String? = null
@@ -78,8 +80,8 @@ class LoginViewModel : ViewModel() {
         id.setPassword(password)
 
         val call = service.login(id)
-        return call.enqueue(object: Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        return call.enqueue(object: Callback<UUID> {
+            override fun onResponse(call: Call<UUID>, response: Response<UUID>) {
                 if(response != null){
                     if(response.code() == 200){
                         mld.value = response.body()
@@ -88,11 +90,13 @@ class LoginViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<UUID>, t: Throwable) {
                 Log.d("loginError", "Error in login: " + t.message)
             }
 
+
         })
+
     }
 
     interface LoginService {
@@ -100,7 +104,7 @@ class LoginViewModel : ViewModel() {
         fun createAccount(@Body id: LoginData): Call<Void>
 
         @POST("/Read/Authenticate")
-        fun login(@Body id: LoginData): Call<String>
+        fun login(@Body id: LoginData): Call<UUID>
     }
 
 }
