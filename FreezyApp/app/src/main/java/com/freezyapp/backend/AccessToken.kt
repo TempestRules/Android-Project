@@ -3,22 +3,45 @@ package com.freezyapp.backend
 import android.content.Context
 import android.content.SharedPreferences
 import com.freezyapp.R
+import java.lang.Error
+import java.util.*
 
-class AccessToken(val activity: Context) {
+class AccessToken() {
 
-    private val file_key: String = activity.getString(R.string.preference_file_key)
-    private val token_key: String = activity.getString(R.string.preference_access_token_key)
+    companion object {
+        private lateinit var context: Context;
 
-    private val pref: SharedPreferences = activity.getSharedPreferences(file_key, Context.MODE_PRIVATE)
+        fun setContext(context: Context) {
+            AccessToken.context = context
+            pref = Companion.context.getSharedPreferences(file_key, Context.MODE_PRIVATE)
+        }
 
-    fun get(): String? {
-        return pref.getString(token_key, null)
-    }
+        private const val file_key: String = "AccessTokenFile"
+        private const val token_key: String = "AccessToken"
 
-    fun set(accessToken: String) {
-        with (pref.edit()) {
-            putString(token_key, accessToken)
-            apply()
+        private var pref: SharedPreferences? = null
+
+        fun get(): UUID? {
+            if (pref == null)
+                return null
+
+            val storedValue = pref!!.getString(token_key, null)
+            return if (storedValue == null) {
+                null
+            } else {
+                UUID.fromString(storedValue)
+            }
+        }
+
+        fun set(accessToken: UUID) {
+            if (pref == null) {
+                throw Error("Context have not been sat!");
+            }
+
+            with (pref!!.edit()) {
+                putString(token_key, accessToken.toString())
+                apply()
+            }
         }
     }
 }
