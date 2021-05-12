@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freezyapp.R
 import com.freezyapp.activities.ui.categories.CategoryListAdapter
 import com.freezyapp.viewmodels.CategoryModel
+import com.freezyapp.viewmodels.ItemModel
 
 class CategoryListFragment : Fragment(R.layout.category_list_fragment) {
 
     lateinit var categoryListView: RecyclerView
     val categoryViewModel: CategoryModel by activityViewModels()
+    val itemViewModel: ItemModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +37,7 @@ class CategoryListFragment : Fragment(R.layout.category_list_fragment) {
         categoryListView.layoutManager = LinearLayoutManager(context)
 
         categoryViewModel.liveList.observe(viewLifecycleOwner, Observer {
-            categoryListView.adapter = CategoryListAdapter(it, categoryViewModel, parentFragmentManager)
+            categoryListView.adapter = CategoryListAdapter(it, requireContext(), viewLifecycleOwner, categoryViewModel, itemViewModel, parentFragmentManager)
         })
 
         categoryViewModel.getAllCategories()

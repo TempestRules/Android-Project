@@ -1,6 +1,7 @@
 package com.freezyapp.activities.ui.items
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.freezyapp.viewmodels.CategoryModel
 import com.freezyapp.viewmodels.ItemModel
 import com.freezyapp.viewmodels.StorageModel
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class ItemListAdapter(private val data: List<RecycleListItem>, private val storageViewModel: StorageModel, private val categoryModel: CategoryModel, private val itemModel: ItemModel, private val fragManager: FragmentManager): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -92,9 +94,12 @@ class ItemListAdapter(private val data: List<RecycleListItem>, private val stora
                 holder.quantity.text = item.getQuantity().toString() + " " + item.getUnit()
 
                 if (item.getExpiration_date() != null) {
-                    val expireDate = item.getExpiration_date()
+
+                    var expireDate: LocalDateTime? = null
+                    expireDate = LocalDateTime.parse(item.getExpiration_date(), DateTimeFormatter.ISO_DATE_TIME)
+
                     val today = LocalDateTime.now()
-                    val diff = expireDate!!.until(today, ChronoUnit.DAYS)
+                    val diff = today!!.until(expireDate, ChronoUnit.DAYS)
 
                     if (diff < 0) {
                         holder.expireDate.text = "Expired"
@@ -113,7 +118,7 @@ class ItemListAdapter(private val data: List<RecycleListItem>, private val stora
                     fragManager.commit {
                         setReorderingAllowed(true)
                         replace(R.id.item_frag_container, ItemDialogFragment(itemModel, fragManager))
-                        addToBackStack(null)
+                        addToBackStack("dialog")
                     }
 
                     true
@@ -124,14 +129,14 @@ class ItemListAdapter(private val data: List<RecycleListItem>, private val stora
                 val category = recycleItem.getCategory()
 
                 holder.title.text = category.getName()
-                holder.background.setBackgroundColor(Color.parseColor(category.getColor()))
+                holder.title.setBackgroundColor(Color.parseColor(category.getColor()))
             }
             holder is StorageHeaderViewHolder -> {
                 val recycleItem = data[position] as StorageRecyleListItem
                 val storage = recycleItem.getStorage()
 
                 holder.title.text = storage.getName()
-                holder.background.setBackgroundColor(Color.parseColor(storage.getColor()))
+                holder.title.setBackgroundColor(Color.parseColor(storage.getColor()))
             }
         }
 

@@ -45,7 +45,7 @@
     <string name="edit_item_title">Edit Item</string>
     <string name="item_name_hint">Item Name</string>
     <string name="item_unit_hint">Item Unit</string>
-    <string name="item_has_expiration">Have expiration date</string>
+    <string name="item_has_expiration">Has expiration date</string>
     <string name="item_old_quantity">Old Quantity:</string>
     <string name="item_new_quantity">New Quantity</string>
 </resources>

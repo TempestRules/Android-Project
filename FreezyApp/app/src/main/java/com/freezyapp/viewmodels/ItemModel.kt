@@ -13,15 +13,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ItemModel: ViewModel() {
-    val BASE_URL = "http://10.0.2.2:8080"
+    val BASE_URL = "http://velm.dk:8080"
     private var retrofit: Retrofit? = null
     var mld = MutableLiveData<List<Item>>()
     var liveList: LiveData<List<Item>> = mld
@@ -46,13 +44,13 @@ class ItemModel: ViewModel() {
         currentItem = item
     }
 
-    fun createItem(name: String, expirationDate: LocalDateTime, unit: String, storage_Unit_Id: Long, quantity: Double, categoryIds: List<Long>){
+    fun createItem(name: String, expirationDate: LocalDateTime?, unit: String, storage_Unit_Id: Long, quantity: Double, categoryIds: List<Long>){
         val service = getClient().create(ItemService::class.java)
         var id = ItemData()
         id.setAccessToken(AccessToken.get())
         id.setName(name)
         id.setQuantity(quantity)
-        id.setExpirationDate(expirationDate)
+        id.setExpirationDate(expirationDate?.format(DateTimeFormatter.ISO_DATE_TIME))
         id.setUnit(unit)
         id.setStorage_Unit_Id(storage_Unit_Id)
         id.setCategoryIds(categoryIds)
@@ -62,6 +60,10 @@ class ItemModel: ViewModel() {
                 if(response != null){
                     if(response.code() == 201){
                         Log.d("cItem", "Created item successfully")
+                        getItems()
+                    }
+                    else {
+                        Log.d("cItemErrorCode", "Got error code from server: " + response.code().toString())
                     }
                 }
             }
@@ -104,6 +106,7 @@ class ItemModel: ViewModel() {
                 if(response != null){
                     if(response.code() == 200){
                         Log.d("dItem", "Deleted item successfully")
+                        getItems()
                     }
                 }
             }
@@ -132,6 +135,7 @@ class ItemModel: ViewModel() {
                 if(response != null){
                     if(response.code() == 200) {
                         Log.d("uItem", "Updated item successfully")
+                        getItems()
                     }
                 }
             }
@@ -171,12 +175,12 @@ interface ItemService {
     @POST("/Create/Item")
     fun createItem(@Body id: ItemData/*accessToken: UUID, name: String, expirationDate: LocalDateTime, unit: String, storage_Unit_Id: Long, categoryIds: List<Long>*/): Call<Void>
 
-    @GET("/Read/Items")
+    @POST("/Read/Items")
     fun getAllItems(@Body id: ItemData/*accessToken: UUID, storageId: Long*/): Call<List<Item>>
 
-    @DELETE("/Delete/Item")
+    @POST("/Delete/Item")
     fun deleteItem(@Body id: ItemData/*accessToken: UUID, itemId: Long*/): Call<Void>
 
-    @POST("/Update/Item")
+    @PUT("/Update/Item")
     fun updateItem(@Body id: ItemData): Call<Void>
 }

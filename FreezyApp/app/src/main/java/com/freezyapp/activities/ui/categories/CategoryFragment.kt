@@ -7,7 +7,7 @@ import androidx.fragment.app.commit
 import com.freezyapp.R
 import com.freezyapp.activities.ui.categories.fragements.CategoryListFragment
 
-class CategoryFragment : Fragment(R.layout.fragment_storage) {
+class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

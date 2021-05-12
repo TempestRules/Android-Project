@@ -8,7 +8,7 @@
             android:id="@+id/nav_overview"
             android:title="@string/menu_overview" />
         <item
-            android:id="@+id/nav_categories"
+            android:id="@+id/nav_category"
             android:title="@string/menu_categories" />
         <item
             android:id="@+id/nav_storage"

@@ -16,7 +16,7 @@ import retrofit2.http.*
 import java.util.*
 
 class StorageModel : ViewModel() {
-    val BASE_URL = "http://10.0.2.2:8080"
+    val BASE_URL = "http://velm.dk:8080"
     private var retrofit: Retrofit? = null
     var mld = MutableLiveData<List<Storage_Unit>>()
     var liveList: LiveData<List<Storage_Unit>> = mld
@@ -47,11 +47,12 @@ class StorageModel : ViewModel() {
         sd.setName(name)
         sd.setColor(color)
         val call = service.createStorage_Unit(sd)
-        return call.enqueue(object: Callback<Void> {
+        call.enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if(response != null){
                     if(response.code() == 201){
                         Log.d("cSto","Updated storage unit")
+                        getAllStorages()
                     }
                 }
             }
@@ -73,7 +74,10 @@ class StorageModel : ViewModel() {
                 if(response != null){
                     if(response.code() == 200) {
                         mld.value = response.body()
-                        Log.d("gaCat","Successfully read all storage units")
+                        Log.d("gaSto","Successfully read all storage units")
+                    }
+                    else {
+                        Log.d("gaStoErrorCode", "Got error code from server: " + response.code().toString())
                     }
                 }
             }
@@ -90,13 +94,15 @@ class StorageModel : ViewModel() {
         var sd = StorageData()
         sd.setAccessToken(AccessToken.get())
         sd.setStorageId(updateInfo.getId())
-        sd.setUpdateInfo(updateInfo)
+        sd.setName(updateInfo.getName())
+        sd.setColor(updateInfo.getColor())
         val call = service.updateStorage_Unit(sd)
         return call.enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if(response != null){
                     if(response.code() == 200){
                         Log.d("uSto", "Updated storage unit")
+                        getAllStorages()
                     }
                 }
             }
@@ -117,6 +123,7 @@ class StorageModel : ViewModel() {
                 if(response != null){
                     if(response.code() == 200){
                         Log.d("dSto", "Deleted storage unit")
+                        getAllStorages()
                     }
                 }
             }
@@ -133,12 +140,12 @@ interface StorageService {
     @POST("/Create/Storage")
     fun createStorage_Unit(@Body storageData: StorageData/*accessToken: UUID, name: String*/): Call<Void>
 
-    @GET("/Read/AllStorages")
+    @POST("/Read/AllStorages")
     fun getAllStorages(@Body storageData: StorageData/*accessToken: UUID*/): Call<List<Storage_Unit>>
 
     @PUT("/Update/Storage")
     fun updateStorage_Unit(@Body storageData: StorageData/*accessToken: UUID, storageId: Long, updateInfo: ????*/): Call<Void>
 
-    @DELETE("/Delete/Storage")
+    @POST("/Delete/Storage")
     fun deleteStorage_Unit(@Body storageData: StorageData/*accessToken: UUID, name: String*/): Call<Void>
 }

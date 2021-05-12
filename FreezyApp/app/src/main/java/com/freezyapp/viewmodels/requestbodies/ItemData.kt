@@ -7,7 +7,7 @@ class ItemData {
     private var accessToken: UUID? = null
     private var itemId: Long? = null
     private var name: String? = null
-    private var expirationDate: LocalDateTime? = null
+    private var expirationDate: String? = null
     private var unit: String? = null
     private var quantity: Double? = null
     private var storage_Unit_Id: Long? = null
@@ -37,11 +37,11 @@ class ItemData {
         this.name = name
     }
 
-    fun getExpirationDate(): LocalDateTime? {
+    fun getExpirationDate(): String? {
         return expirationDate
     }
 
-    fun setExpirationDate(expirationDate: LocalDateTime?) {
+    fun setExpirationDate(expirationDate: String?) {
         this.expirationDate = expirationDate
     }
 
@@ -76,4 +76,10 @@ class ItemData {
     fun setItemId(itemId: Long?) {
         this.itemId = itemId
     }
+
+    override fun toString(): String {
+        return "ItemData(accessToken=$accessToken, itemId=$itemId, name=$name, expirationDate=$expirationDate, unit=$unit, quantity=$quantity, storage_Unit_Id=$storage_Unit_Id, categoryIds=$categoryIds)"
+    }
+
+
 }

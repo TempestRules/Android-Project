@@ -1,6 +1,7 @@
 package com.freezyapp.activities.ui.storage.fragements
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
@@ -39,5 +40,6 @@ class StorageListFragment : Fragment(R.layout.storage_list_fragment) {
         })
 
         storageViewModel.getAllStorages()
+        Log.d("LICKMA", "BALLS")
     }
 }

@@ -6,14 +6,14 @@ class Item {
     private var id: Long = 0
     private lateinit var unit: String
     private var quantity: Double = 0.0
-    private var expiration_date: LocalDateTime? = null
+    private var expirationDate: String? = null
     private lateinit var name: String
     private lateinit var categoryIds: List<Long>
     private var storage_unit_id: Long = 0
 
-    fun Item(name: String, expiration_date: LocalDateTime, quantity: Double, unit: String) {
+    fun Item(name: String, expiration_date: String?, quantity: Double, unit: String) {
         this.name = name
-        this.expiration_date = expiration_date
+        this.expirationDate = expiration_date
         this.unit = unit
         this.quantity = quantity
     }
@@ -51,12 +51,12 @@ class Item {
         return quantity
     }
 
-    fun getExpiration_date(): LocalDateTime? {
-        return expiration_date
+    fun getExpiration_date(): String? {
+        return expirationDate
     }
 
-    fun setExpiration_date(expiration_date: LocalDateTime?) {
-        this.expiration_date = expiration_date
+    fun setExpiration_date(expiration_date: String?) {
+        this.expirationDate = expiration_date
     }
 
     fun getUnit(): String? {
@@ -73,15 +73,5 @@ class Item {
 
     fun setId(id: Long) {
         this.id = id
-    }
-    override fun toString(): String {
-        return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", expiration_date=" + expiration_date +
-                ", unit='" + unit + '\'' +
-                ", categoryIds" + categoryIds + '\'' +
-                ", Storage_Unit_Id" + storage_unit_id + '\'' +
-                '}'
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.utils.widget.MockView
 import androidx.fragment.app.FragmentManager
@@ -19,8 +20,8 @@ import com.freezyapp.viewmodels.entities.Storage_Unit
 class StorageListAdapter(private val data: List<Storage_Unit>, private val storageViewModel: StorageModel, private val fragmentManager: FragmentManager): RecyclerView.Adapter<StorageListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val editBtn: Button = view.findViewById(R.id.storage_item_edit_btn)
-        val deleteBtn: Button = view.findViewById(R.id.storage_item_delete_btn)
+        val editBtn: ImageButton = view.findViewById(R.id.storage_item_edit_btn)
+        val deleteBtn: ImageButton = view.findViewById(R.id.storage_item_delete_btn)
         val itemTitle: TextView = view.findViewById(R.id.storage_item_title)
         val itemColor: MockView = view.findViewById(R.id.storage_item_color)
     }

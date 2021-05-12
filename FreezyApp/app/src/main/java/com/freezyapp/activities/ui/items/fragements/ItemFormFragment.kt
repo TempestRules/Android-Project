@@ -1,11 +1,15 @@
 package com.freezyapp.activities.ui.storage.fragements
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.freezyapp.R
@@ -18,6 +22,7 @@ import com.freezyapp.viewmodels.entities.Category
 import com.freezyapp.viewmodels.entities.Item
 import com.freezyapp.viewmodels.entities.Storage_Unit
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ItemFormFragment : Fragment(R.layout.item_form_fragment) {
@@ -45,13 +50,17 @@ class ItemFormFragment : Fragment(R.layout.item_form_fragment) {
         categorySpinner = view.findViewById(R.id.item_category_spinner)
         expirationDate = view.findViewById(R.id.item_expiration_date)
 
-        haveExpiration = view.findViewById<CheckBox>(R.id.item_expiration_chk)
+        haveExpiration = view.findViewById(R.id.item_expiration_chk)
         haveExpiration.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                expirationDate.layoutParams = ViewGroup.LayoutParams(expirationDate.width, ViewGroup.LayoutParams.WRAP_CONTENT)
+                val params: ViewGroup.LayoutParams = expirationDate.layoutParams
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                expirationDate.layoutParams = params
             }
             else {
-                expirationDate.layoutParams = ViewGroup.LayoutParams(expirationDate.width, 1)
+                val params: ViewGroup.LayoutParams = expirationDate.layoutParams
+                params.height = 1
+                expirationDate.layoutParams = params
             }
         }
 
@@ -60,6 +69,13 @@ class ItemFormFragment : Fragment(R.layout.item_form_fragment) {
             val adapter = StorageSpinnerAdapter(requireContext(), it)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             storageSpinner.adapter = adapter
+
+            if (itemViewModel.getCurrentItem() != null) {
+                val unit = Storage_Unit()
+                unit.setId(itemViewModel.getCurrentItem()!!.getStorageUnitId())
+                storageSpinner.setSelection(storageList.indexOf(unit))
+            }
+
             storageViewModel.liveList.removeObservers(context as AppCompatActivity)
         }
         val categoryObserve: Observer<List<Category>> = Observer {
@@ -67,6 +83,13 @@ class ItemFormFragment : Fragment(R.layout.item_form_fragment) {
             val adapter = CategorySpinnerAdapter(requireContext(), it)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             categorySpinner.adapter = adapter
+
+            if (itemViewModel.getCurrentItem() != null) {
+                val cat = Category()
+                cat.setId(itemViewModel.getCurrentItem()!!.getCategoryIds()[0])
+                categorySpinner.setSelection(categoryList.indexOf(cat))
+            }
+
             categoryViewModel.liveList.removeObservers(context as AppCompatActivity)
         }
 
@@ -79,75 +102,103 @@ class ItemFormFragment : Fragment(R.layout.item_form_fragment) {
         if (itemViewModel.getCurrentItem() != null) {
             val current: Item = itemViewModel.getCurrentItem()!!
 
-            view.findViewById<TextView>(R.id.storage_form_title).text = getString(R.string.edit_item_title)
+            view.findViewById<TextView>(R.id.item_form_title).text = getString(R.string.edit_item_title)
 
             nameEdt.setText(current.getName())
             unitEdt.setText(current.getUnit())
 
             if (current.getExpiration_date() != null) {
+                val curExpDate = LocalDateTime.parse(current.getExpiration_date(), DateTimeFormatter.ISO_DATE_TIME)
+
                 haveExpiration.isChecked = true
 
                 val expDate = Calendar.getInstance()
                 expDate.clear()
-                expDate.set(current.getExpiration_date()!!.year, current.getExpiration_date()!!.monthValue, current.getExpiration_date()!!.dayOfMonth)
+                expDate.set(curExpDate.year, curExpDate.monthValue, curExpDate.dayOfMonth)
 
-                expirationDate.updateDate(expDate.get(Calendar.YEAR), expDate.get(Calendar.MONTH), expDate.get(Calendar.DAY_OF_MONTH))
-
-                val unit = Storage_Unit()
-                unit.setId(current.getStorageUnitId())
-                storageSpinner.setSelection(storageList.indexOf(unit))
-
-                val cat = Category()
-                cat.setId(current.getCategoryIds()[0])
-                categorySpinner.setSelection(categoryList.indexOf(cat))
+                expirationDate.updateDate(expDate.get(Calendar.YEAR), expDate.get(Calendar.MONTH) - 1, expDate.get(Calendar.DAY_OF_MONTH))
             }
 
             view.findViewById<Button>(R.id.btn_create_item).text = getString(R.string.edit)
         }
 
         view.findViewById<Button>(R.id.btn_cancel_item).setOnClickListener {
-            parentFragmentManager.popBackStack()
+            if (itemViewModel.getCurrentItem() != null) {
+                parentFragmentManager.popBackStack("dialog", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
+            else {
+                parentFragmentManager.popBackStack()
+            }
         }
 
         view.findViewById<Button>(R.id.btn_create_item).setOnClickListener {
-            if (itemViewModel.getCurrentItem() != null) {
-                //Edit
-                val item: Item = itemViewModel.getCurrentItem()!!
-                item.setName(nameEdt.text.toString())
-                item.setUnit(unitEdt.text.toString())
+            if (validInput()) {
+                if (itemViewModel.getCurrentItem() != null) {
+                    //Edit
+                    val item: Item = itemViewModel.getCurrentItem()!!
+                    item.setName(nameEdt.text.toString())
+                    item.setUnit(unitEdt.text.toString())
 
-                if (haveExpiration.isChecked) {
-                    val expireDate = LocalDateTime.of(expirationDate.year, expirationDate.month, expirationDate.dayOfMonth, 0, 0)
-                    item.setExpiration_date(expireDate)
+                    if (haveExpiration.isChecked) {
+                        val expireDate = LocalDateTime.of(expirationDate.year, expirationDate.month + 1, expirationDate.dayOfMonth, 0, 0)
+                        item.setExpiration_date(expireDate.format(DateTimeFormatter.ISO_DATE_TIME))
+                        Log.d("EXP", item.getExpiration_date()!!)
+                    }
+                    else {
+                        item.setExpiration_date(null)
+                    }
+
+                    val storageId = storageList[storageSpinner.selectedItemPosition].getId()
+                    item.setStorageUnitId(storageId as Long)
+
+                    val categoryId = categoryList[categorySpinner.selectedItemPosition].getId()
+                    item.setCategory(arrayOf(categoryId).toList() as List<Long>)
+
+                    itemViewModel.updateItem(item)
                 }
                 else {
-                    item.setExpiration_date(null)
+                    //new
+                    var expireDate: LocalDateTime? = null
+
+                    if (haveExpiration.isChecked) {
+                        expireDate = LocalDateTime.of(expirationDate.year, expirationDate.month + 1, expirationDate.dayOfMonth, 0, 0)
+                    }
+
+                    val storageId = storageList[storageSpinner.selectedItemPosition].getId()
+                    val categoryId = categoryList[categorySpinner.selectedItemPosition].getId()
+
+                    itemViewModel.createItem(nameEdt.text.toString(), expireDate, unitEdt.text.toString(), storageId as Long, 0.0, arrayOf(categoryId).toList() as List<Long>)
                 }
 
-                val storageId = storageList[storageSpinner.selectedItemPosition].getId()
-                item.setStorageUnitId(storageId as Long)
 
-                val categoryId = categoryList[categorySpinner.selectedItemPosition].getId()
-                item.setCategory(arrayOf(categoryId).toList() as List<Long>)
-
-                itemViewModel.updateItem(item)
-                itemViewModel.getItems()
+                if (itemViewModel.getCurrentItem() != null) {
+                    parentFragmentManager.popBackStack("dialog", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                }
+                else {
+                    parentFragmentManager.popBackStack()
+                }
             }
-            else {
-                //new
-                val expireDate = LocalDateTime.of(expirationDate.year, expirationDate.month, expirationDate.dayOfMonth, 0, 0)
-
-                val storageId = storageList[storageSpinner.selectedItemPosition].getId()
-                val categoryId = categoryList[categorySpinner.selectedItemPosition].getId()
-
-                itemViewModel.createItem(nameEdt.text.toString(), expireDate, unitEdt.text.toString(), storageId as Long, 0.0, arrayOf(categoryId).toList() as List<Long>)
-                itemViewModel.getItems()
-            }
-
-
-            parentFragmentManager.popBackStack()
         }
     }
 
+    private fun validInput(): Boolean {
+        if (nameEdt.text.isEmpty()) {
+            AlertDialog.Builder(context).setTitle("No Name").show()
+            return false
+        }
+        else if (unitEdt.text.isEmpty()) {
+            AlertDialog.Builder(context).setTitle("No Unit").show()
+            return false
+        }
+        else if (storageList.isEmpty()) {
+            AlertDialog.Builder(context).setTitle("No Storages").show()
+            return false
+        }
+        else if (categoryList.isEmpty()) {
+            AlertDialog.Builder(context).setTitle("No Categories").show()
+            return false
+        }
 
+        return true
+    }
 }

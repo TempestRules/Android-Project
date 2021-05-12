@@ -16,7 +16,7 @@ import retrofit2.http.*
 import java.util.*
 
 class CategoryModel : ViewModel() {
-    val BASE_URL = "http://10.0.2.2:8080"//"http://velm.dk:8080"
+    val BASE_URL = "http://velm.dk:8080"
     private var retrofit: Retrofit? = null
     var mld = MutableLiveData<List<Category>>()
     var liveList: LiveData<List<Category>> = mld
@@ -52,6 +52,7 @@ class CategoryModel : ViewModel() {
                 if (response != null) {
                     if(response.code() == 201){
                         Log.d("cCatSuccess", "Created new category")
+                        getAllCategories()
                     }
                 }
             }
@@ -98,6 +99,7 @@ class CategoryModel : ViewModel() {
                 if(response != null){
                     if(response.code() == 200){
                         Log.d("uCat","Updated category")
+                        getAllCategories()
                     }
                 }
             }
@@ -120,6 +122,7 @@ class CategoryModel : ViewModel() {
                 if(response != null){
                     if(response.code() == 200){
                         Log.d("dCat","Deleted category")
+                        getAllCategories()
                     }
                 }
             }
@@ -142,13 +145,13 @@ interface CategoryService {
     @POST("/Create/Category")
     fun createCategory(@Body categoryData: CategoryData/*@Field("accessToken") accessToken: UUID,@Field("name") name: String,@Field("color") color: String*/): Call<Void>
 
-    @GET("/Read/AllCategories")
+    @POST("/Read/AllCategories")
     fun getAllCategories(@Body categoryData: CategoryData/*accessToken: UUID*/): Call<List<Category>>
 
     @PUT("/Update/Category")
     fun updateCategory(@Body categoryData: CategoryData/*accessToken: UUID, categoryId: Long, color: String*/): Call<Void> //Maybe just like this????
 
-    @DELETE("/Delete/Category")
+    @POST("/Delete/Category")
     fun deleteCategory(@Body categoryData: CategoryData/*accessToken: UUID, categoryId: Long*/): Call<Void>
 }
 

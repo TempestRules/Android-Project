@@ -13,17 +13,23 @@ class ItemSortDialog(private val itemViewModel: ItemModel, private val filterCha
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<CheckBox>(R.id.sort_storage_chk).setOnCheckedChangeListener { buttonView, isChecked ->
+        val sortStorage = view.findViewById<CheckBox>(R.id.sort_storage_chk)
+        sortStorage.isChecked = itemViewModel.getSortStorage()
+        sortStorage.setOnCheckedChangeListener { buttonView, isChecked ->
             itemViewModel.setSortStorage(isChecked)
             filterChangeCallback.onChange()
         }
 
-        view.findViewById<CheckBox>(R.id.sort_category_chk).setOnCheckedChangeListener { buttonView, isChecked ->
+        val sortCategory = view.findViewById<CheckBox>(R.id.sort_category_chk)
+        sortCategory.isChecked = itemViewModel.getSortCategory()
+        sortCategory.setOnCheckedChangeListener { buttonView, isChecked ->
             itemViewModel.setSortCategory(isChecked)
             filterChangeCallback.onChange()
         }
 
-        view.findViewById<CheckBox>(R.id.show_expired_chk).setOnCheckedChangeListener { buttonView, isChecked ->
+        val sortExpired = view.findViewById<CheckBox>(R.id.show_expired_chk)
+        sortExpired.isChecked = itemViewModel.getOnlyExpired()
+        sortExpired.setOnCheckedChangeListener { buttonView, isChecked ->
             itemViewModel.setOnlyExpired(isChecked)
             filterChangeCallback.onChange()
         }

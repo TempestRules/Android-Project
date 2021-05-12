@@ -1,6 +1,7 @@
 package com.freezyapp.activities.ui.storage.fragements
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,7 @@ import com.freezyapp.viewmodels.entities.Category
 import com.freezyapp.viewmodels.entities.Item
 import com.freezyapp.viewmodels.entities.Storage_Unit
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class ItemListFragment : Fragment(R.layout.item_list_fragment) {
@@ -83,12 +85,17 @@ class ItemListFragment : Fragment(R.layout.item_list_fragment) {
     fun generateRecycleList(data: List<Item>) {
         var dataList = data
         if (itemViewModel.getOnlyExpired()) {
-            dataList = dataList.filter{
-                if (it.getExpiration_date() == null) false
+            dataList = dataList.filter {
+                var diff = 0L
+                if (it.getExpiration_date() == null) {
+                    diff = 1L
+                }
+                else {
+                    val expireDate = it.getExpiration_date()
+                    val today = LocalDateTime.now()
+                    diff = today.until(LocalDateTime.parse(expireDate, DateTimeFormatter.ISO_DATE_TIME), ChronoUnit.DAYS)
+                }
 
-                val expireDate = it.getExpiration_date()
-                val today = LocalDateTime.now()
-                val diff = expireDate!!.until(today, ChronoUnit.DAYS)
 
                 diff < 0
             }
@@ -102,13 +109,17 @@ class ItemListFragment : Fragment(R.layout.item_list_fragment) {
                 val categoryList = categories
                 categoryViewModel.liveList.removeObservers(context as AppCompatActivity)
 
-                var recycleDataList = dataList.map { item -> ItemRecycleListItem(item, categoryList.find { cat -> cat.getId() == item.getCategoryIds()[0]}!!.getColor()!!) }
+                var recycleDataList = dataList.map { item -> ItemRecycleListItem(item, categoryList.find { cat -> cat.getId() == item.getCategoryIds()[0] }!!.getColor()!!) }
 
                 if (itemViewModel.getSortStorage()) {
                     val dataMap: HashMap<Storage_Unit, MutableList<ItemRecycleListItem>> = HashMap()
 
                     storageList.forEach {
-                        dataMap[it] = recycleDataList.filter { item -> item.getItem().getStorageUnitId() == it.getId() }.toMutableList()
+                        val items = recycleDataList.filter { item -> item.getItem().getStorageUnitId() == it.getId() }.toMutableList()
+
+                        if (items.isNotEmpty()) {
+                            dataMap[it] = items
+                        }
                     }
 
                     if (itemViewModel.getSortCategory()) {
@@ -169,7 +180,7 @@ class ItemListFragment : Fragment(R.layout.item_list_fragment) {
         storageViewModel.getAllStorages()
     }
 
-    fun generateCategoryList(data: java.util.HashMap<Category, MutableList<ItemRecycleListItem>>): MutableList<RecycleListItem> {
+    private fun generateCategoryList(data: java.util.HashMap<Category, MutableList<ItemRecycleListItem>>): MutableList<RecycleListItem> {
         val result = mutableListOf<RecycleListItem>()
 
         data.forEach{
@@ -183,7 +194,7 @@ class ItemListFragment : Fragment(R.layout.item_list_fragment) {
         return result
     }
 
-    fun generateStorageList(data: HashMap<Storage_Unit, MutableList<ItemRecycleListItem>>): MutableList<RecycleListItem> {
+    private fun generateStorageList(data: HashMap<Storage_Unit, MutableList<ItemRecycleListItem>>): MutableList<RecycleListItem> {
         val result = mutableListOf<RecycleListItem>()
 
         data.forEach {
