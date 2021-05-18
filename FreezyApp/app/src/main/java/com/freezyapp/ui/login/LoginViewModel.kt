@@ -79,6 +79,7 @@ class LoginViewModel : ViewModel() {
         id.setUsername(username)
         id.setPassword(password)
 
+
         val call = service.login(id)
         return call.enqueue(object: Callback<UUID> {
             override fun onResponse(call: Call<UUID>, response: Response<UUID>) {
