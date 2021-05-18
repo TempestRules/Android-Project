@@ -66,6 +66,7 @@ class ItemListFragment : Fragment(R.layout.item_list_fragment) {
         itemListView.setHasFixedSize(true)
         itemListView.layoutManager = LinearLayoutManager(context)
 
+        itemViewModel.resetItemList()
         itemViewModel.liveList.observe(viewLifecycleOwner, Observer {
             items = it;
             update()
@@ -74,6 +75,7 @@ class ItemListFragment : Fragment(R.layout.item_list_fragment) {
         itemList.observe(viewLifecycleOwner, Observer {
             itemListView.adapter = ItemListAdapter(it, storageViewModel, categoryViewModel, itemViewModel, parentFragmentManager)
         })
+
         itemViewModel.getItems()
     }
 

@@ -33,6 +33,7 @@ class ItemDialogFragment(private val itemViewModel: ItemModel, private val paren
         view.findViewById<Button>(R.id.btn_delete_item).setOnClickListener {
             Log.d("ID", itemViewModel.getCurrentItem()!!.getId()!!.toString())
             itemViewModel.deleteItem(itemViewModel.getCurrentItem()!!.getId()!!)
+            itemViewModel.resetItemList()
             parentFragManager.popBackStack()
         }
 

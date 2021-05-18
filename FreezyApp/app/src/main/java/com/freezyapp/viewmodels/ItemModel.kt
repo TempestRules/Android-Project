@@ -44,6 +44,10 @@ class ItemModel: ViewModel() {
         currentItem = item
     }
 
+    fun resetItemList() {
+        mld.value = emptyList()
+    }
+
     fun createItem(name: String, expirationDate: LocalDateTime?, unit: String, storage_Unit_Id: Long, quantity: Double, categoryIds: List<Long>){
         val service = getClient().create(ItemService::class.java)
         var id = ItemData()
