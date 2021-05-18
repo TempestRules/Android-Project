@@ -25,7 +25,7 @@ class RegistrationFragment : Fragment() {
 
 
         binding = DataBindingUtil.inflate<RegistrationFragmentBinding>(inflater,
-            R.layout.login_fragment,container,false)
+            R.layout.registration_fragment,container,false)
 
 
         binding.backToLogin.setOnClickListener{ view : View ->
