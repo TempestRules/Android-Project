@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.freezyapp.backend.AccessToken
+import com.freezyapp.data.DataBaseHandler
+import com.freezyapp.data.model.User
 import com.freezyapp.viewmodels.entities.Login
 import com.freezyapp.viewmodels.requestbodies.LoginData
 import retrofit2.Call
@@ -25,6 +27,7 @@ class LoginViewModel : ViewModel() {
     var username: String? = null
     var password: String? = null
     var password2: String? = null
+    var stay_login: Boolean = false
     var name: String? = "enter name"
 
     init{
@@ -87,6 +90,8 @@ class LoginViewModel : ViewModel() {
                     if(response.code() == 200){
                         mld.value = response.body()
                         Log.d("login", "login successfully")
+
+
                     }
                 }
             }

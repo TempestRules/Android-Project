@@ -10,7 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.freezyapp.R
 import com.freezyapp.backend.AccessToken
+import com.freezyapp.data.DataBaseHandler
+import com.freezyapp.data.model.User
 import com.freezyapp.databinding.LoginFragmentBinding
+import java.util.*
 
 class LoginFragment : Fragment() {
 
@@ -48,8 +51,15 @@ class LoginFragment : Fragment() {
     private fun onLogin(){
         viewModel.username = binding.username.text.toString()
         viewModel.password = binding.password.text.toString()
+        viewModel.stay_login = binding.stayLogin.isActivated()
 
         viewModel.login()
+
+        if (binding.stayLogin.isActivated()){
+            var user = User(viewModel.mld.value!!)
+            var db = DataBaseHandler(requireActivity().applicationContext)
+            db.insertData(user)
+        }
 
         AccessToken.setContext(requireActivity().applicationContext)
         AccessToken.set(viewModel.mld.value!!)
