@@ -1,10 +1,10 @@
 package com.freezy.freezy_backend.Domain.Services;
 
 import com.freezy.freezy_backend.Domain.RequestBodies.CategoryBody;
-import com.freezy.freezy_backend.Domain.RequestBodies.ItemBody;
 import com.freezy.freezy_backend.Persistence.Entities.*;
 import com.freezy.freezy_backend.Persistence.Repositories.CategoryRepository;
 import com.freezy.freezy_backend.Persistence.Repositories.CollectionRepository;
+import com.freezy.freezy_backend.Persistence.Repositories.ItemRepository;
 import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private ItemService itemService;
+    private ItemRepository itemRepository;
 
     public CategoryService() {
     }
@@ -84,20 +84,16 @@ public class CategoryService {
                 Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
                         .getCollections().get(0).getId());
 
-                Category category = categoryRepository.findCategoryById(categoryBody.getCategoryId());
+                Category category = categoryRepository.findCategoryByIdWithItems(categoryBody.getCategoryId());
 
-                //Deleting every reference to every item in every storage unit
-                for (Storage_Unit storage_unit : collection.getStorage_units()) {
-                    for (Item item : storage_unit.getItems()) {
-                        if (item.getCategories().contains(category)) {
-                            //item.removeCategoryFromItem(category);
-                            ItemBody itemBody = new ItemBody();
-                            itemBody.setAccessToken(categoryBody.getAccessToken());
-                            itemBody.setItemId(item.getId());
-                            itemService.deleteItem(itemBody);
-                        }
-                    }
+                //Deleting items in this category
+                for (int i = category.getItems().size() - 1; i >= 0; i--) {
+                    Item delItem = itemRepository.findItemByIdWithCategories(category.getItems().get(i).getId());
+                    //Removing all references to category
+                    delItem.removeCategoryFromItem(category);
+                    itemRepository.deleteById(delItem.getId());
                 }
+
                 //Deleting every reference to Collection
                 collection.removeCategory(category);
 
