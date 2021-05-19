@@ -1,12 +1,15 @@
 package com.example.login
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.freezyapp.R
 import com.freezyapp.backend.AccessToken
 import com.freezyapp.viewmodels.entities.Login
 import com.freezyapp.viewmodels.requestbodies.LoginData
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,6 +66,7 @@ class LoginViewModel : ViewModel() {
                     if (response != null) {
                         if (response.code() == 201) {
                             Log.d("cAccount", "Created account successfully")
+
                         }
                     }
                 }
@@ -72,7 +76,7 @@ class LoginViewModel : ViewModel() {
                 }
             })
         } else {
-
+            Toast.makeText(AccessToken.getContext(), R.string.not_same_password, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -97,6 +101,7 @@ class LoginViewModel : ViewModel() {
                         if (stay_login) {
                             AccessToken.setAutoLogin(stay_login)
                         }
+
                     }
                 }
             }

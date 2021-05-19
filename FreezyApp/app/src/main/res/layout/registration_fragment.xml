@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:text="Should be an image"
+            android:text="@string/app_name"
             app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
