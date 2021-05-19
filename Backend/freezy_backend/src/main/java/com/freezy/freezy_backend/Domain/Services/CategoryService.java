@@ -8,6 +8,7 @@ import com.freezy.freezy_backend.Persistence.Repositories.ItemRepository;
 import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +37,13 @@ public class CategoryService {
     public boolean createCategory(CategoryBody categoryBody) {
         try {
             if (authenticationService.verifyToken(categoryBody.getAccessToken())) {
-                //Making sure that two identical categories can't be created.
-                if (!categoryRepository.existsByName(categoryBody.getName())) {
                     Token token = tokenRepository.getTokenByToken(categoryBody.getAccessToken());
                     Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
                             .getCollections().get(0).getId());
+
+                    if (collection.getCategories() == null) {
+                        collection.setCategories(new ArrayList<>());
+                    }
 
                     //Creating and adding the new category to the collection
                     Category category = new Category(categoryBody.getName(), categoryBody.getColor());
@@ -48,7 +51,6 @@ public class CategoryService {
 
                     collectionRepository.save(collection);
                     return true;
-                }
             }
         } catch (Exception e) {
             System.out.println("CreateCategory EXCEPTION: " + e);
@@ -76,6 +78,7 @@ public class CategoryService {
         }
     }
 
+    @Transactional
     public void deleteCategory(CategoryBody categoryBody) {
         try {
             if (authenticationService.verifyToken(categoryBody.getAccessToken())) {
@@ -86,12 +89,18 @@ public class CategoryService {
 
                 Category category = categoryRepository.findCategoryByIdWithItems(categoryBody.getCategoryId());
 
-                //Deleting items in this category
-                for (int i = category.getItems().size() - 1; i >= 0; i--) {
-                    Item delItem = itemRepository.findItemByIdWithCategories(category.getItems().get(i).getId());
-                    //Removing all references to category
-                    delItem.removeCategoryFromItem(category);
-                    itemRepository.deleteById(delItem.getId());
+                if (category != null) {
+
+                    //Deleting items in this category
+                    for (int i = category.getItems().size() - 1; i >= 0; i--) {
+                        Item delItem = itemRepository.findItemByIdWithCategories(category.getItems().get(i).getId());
+                        //Removing all references to category
+                        delItem.removeCategoryFromItem(category);
+                        itemRepository.deleteById(delItem.getId());
+                    }
+
+                } else {
+                    category = categoryRepository.findCategoryById(categoryBody.getCategoryId());
                 }
 
                 //Deleting every reference to Collection

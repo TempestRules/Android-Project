@@ -6,6 +6,7 @@ import com.freezy.freezy_backend.Persistence.Entities.*;
 import com.freezy.freezy_backend.Persistence.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +118,7 @@ public class ItemService {
         }
     }
 
+    @Transactional
     public void deleteItem(ItemBody itemBody) {
         try {
             if (authenticationService.verifyToken(itemBody.getAccessToken())) {
