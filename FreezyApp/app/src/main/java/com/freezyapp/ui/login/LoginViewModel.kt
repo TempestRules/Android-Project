@@ -1,16 +1,10 @@
 package com.example.login
 
-import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
-import com.freezyapp.R
-import com.freezyapp.activities.MainActivity
 import com.freezyapp.backend.AccessToken
-import com.freezyapp.data.DataBaseHandler
-import com.freezyapp.data.model.User
 import com.freezyapp.viewmodels.entities.Login
 import com.freezyapp.viewmodels.requestbodies.LoginData
 import retrofit2.Call

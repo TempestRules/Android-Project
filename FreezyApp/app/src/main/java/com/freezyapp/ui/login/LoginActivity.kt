@@ -7,15 +7,13 @@ import android.util.Log
 import com.freezyapp.R
 import com.freezyapp.activities.MainActivity
 import com.freezyapp.backend.AccessToken
-import com.freezyapp.data.DataBaseHandler
-import com.freezyapp.data.model.User
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AccessToken.setContext(applicationContext)
         setContentView(R.layout.activity_login)
-        stayedLogin()
+        //stayedLogin()
     }
 
     private fun stayedLogin(){

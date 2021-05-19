@@ -14,9 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.freezyapp.R
 import com.freezyapp.activities.MainActivity
-import com.freezyapp.backend.AccessToken
-import com.freezyapp.data.DataBaseHandler
-import com.freezyapp.data.model.User
 import com.freezyapp.databinding.LoginFragmentBinding
 
 
