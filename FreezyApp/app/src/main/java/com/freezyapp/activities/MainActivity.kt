@@ -1,7 +1,9 @@
 package com.freezyapp.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,9 +13,12 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.get
 import com.freezyapp.R
 import com.freezyapp.backend.AccessToken
+import com.freezyapp.ui.login.LoginActivity
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +37,16 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
+        val navMenu = navView.menu
+        var logoutView = navMenu.getItem(navMenu.size() - 1)
+        logoutView.setOnMenuItemClickListener {
+            AccessToken.deleteAccessToken()
+            var intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return@setOnMenuItemClickListener true
+        }
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(

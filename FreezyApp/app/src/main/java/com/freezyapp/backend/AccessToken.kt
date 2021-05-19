@@ -47,5 +47,12 @@ class AccessToken() {
                 apply()
             }
         }
+
+        fun deleteAccessToken(){
+            with(pref!!.edit()){
+                remove(token_key)
+                apply()
+            }
+        }
     }
 }

@@ -65,6 +65,7 @@
     <string name="switch_stay_login">Stay logged in</string>
     <string name="action_back_to_login">"back to login"</string>
     <string name="action_register">"register account"</string>
+    <string name="registered">"Account registered"</string>
 
 
     <string name="preference_file_key">AccessTokenFile</string>

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.freezyapp.R
 import com.freezyapp.databinding.RegistrationFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 
 class RegistrationFragment : Fragment() {
 
@@ -54,6 +55,8 @@ class RegistrationFragment : Fragment() {
 
         viewModel.createAccount()
         requireView().findNavController().navigate(R.id.action_registration_fragment_to_login_fragment)
+        val sb = Snackbar.make(requireView(), R.string.registered, Snackbar.LENGTH_SHORT)
+        sb.show()
     }
 
 
