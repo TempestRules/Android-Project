@@ -61,7 +61,7 @@ class LoginFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner, Observer {
             val intent = Intent (getActivity(), MainActivity::class.java)
             getActivity()?.startActivity(intent)
-
+            getActivity()?.finish()
         })
     }
 
