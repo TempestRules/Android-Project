@@ -13,7 +13,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AccessToken.setContext(applicationContext)
         setContentView(R.layout.activity_login)
-        //stayedLogin()
+        stayedLogin()
     }
 
     private fun stayedLogin(){
