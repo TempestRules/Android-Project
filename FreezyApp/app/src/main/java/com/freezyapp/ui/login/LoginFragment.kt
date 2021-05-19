@@ -57,7 +57,7 @@ class LoginFragment : Fragment() {
     private fun onLogin(){
         viewModel.username = binding.username.text.toString()
         viewModel.password = binding.password.text.toString()
-        viewModel.stay_login = binding.stayLogin.isActivated()
+        viewModel.stay_login = binding.stayLogin.isChecked()
         Log.d("test", "works")
         viewModel.login()
 

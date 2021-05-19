@@ -22,6 +22,7 @@ class AccessToken() {
 
         private const val file_key: String = "AccessTokenFile"
         private const val token_key: String = "AccessToken"
+        private const val auto_key: String = "AutoKey"
 
         private var pref: SharedPreferences? = null
 
@@ -48,9 +49,27 @@ class AccessToken() {
             }
         }
 
+        fun getAutoLogin(): Boolean? {
+            if (pref == null)
+                return false
+            return pref!!.getBoolean(auto_key, false)
+        }
+
+        fun setAutoLogin(autoLogin: Boolean) {
+            if (pref == null) {
+                throw Error("Context have not been sat!");
+            }
+
+            with (pref!!.edit()) {
+                putBoolean(auto_key, autoLogin)
+                apply()
+            }
+        }
+
         fun deleteAccessToken(){
             with(pref!!.edit()){
                 remove(token_key)
+                remove(auto_key)
                 apply()
             }
         }

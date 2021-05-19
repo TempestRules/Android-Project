@@ -99,14 +99,10 @@ class LoginViewModel : ViewModel() {
                         AccessToken.set(response.body()?.getauthenticationToken()!!)
                         corretUser = true
                         Log.d("login", "login successfully")
-
+                        Log.d("stat", stay_login.toString())
                         if (stay_login) {
-                            var user = User(response.body()?.getauthenticationToken()!!)
-                            var db = DataBaseHandler(AccessToken.getContext())
-                            db.insertData(user)
+                            AccessToken.setAutoLogin(stay_login)
                         }
-
-
                     }
                 }
             }
