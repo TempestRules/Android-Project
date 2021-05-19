@@ -57,7 +57,7 @@ class RegistrationFragment : Fragment() {
         viewModel.password2 = binding.editPassword2.text.toString()
 
         viewModel.createAccount()
-
+        requireView().findNavController().navigate(R.id.action_registration_fragment_to_login_fragment)
     }
 
 

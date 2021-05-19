@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
+import com.freezyapp.R
 import com.freezyapp.activities.MainActivity
 import com.freezyapp.backend.AccessToken
 import com.freezyapp.data.DataBaseHandler
