@@ -1,9 +1,11 @@
 package com.example.login
 
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.freezyapp.activities.MainActivity
 import com.freezyapp.backend.AccessToken
 import com.freezyapp.data.DataBaseHandler
 import com.freezyapp.data.model.User
@@ -20,15 +22,17 @@ import java.util.*
 
 class LoginViewModel : ViewModel() {
 
-    val BASE_URL = "http://10.0.2.2:8080"
+    val BASE_URL = "http://velm.dk:8080"
     private var retrofit: Retrofit? = null
     var mld = MutableLiveData<UUID>()
+    var liveData: LiveData<UUID> = mld
 
     var username: String? = null
     var password: String? = null
     var password2: String? = null
     var stay_login: Boolean = false
     var name: String? = "enter name"
+    var corretUser = false
 
     init{
         Log.i("RegistrationViewModel", "RegistrationViewModel created")
@@ -52,10 +56,10 @@ class LoginViewModel : ViewModel() {
     fun createAccount(){
         if (password == password2) {
             val service = getClient().create(LoginService::class.java)
-            var id = LoginData()
+            var id = Login()
             id.setUsername(username)
             id.setPassword(password)
-            id.setName(name)
+            id.setAccountDetailsName(name)
 
             val call = service.createAccount(id)
             return call.enqueue(object : Callback<Void> {
@@ -78,26 +82,36 @@ class LoginViewModel : ViewModel() {
 
     fun login(){
         val service = getClient().create(LoginService::class.java)
-        var id = LoginData()
+        var id = Login()
         id.setUsername(username)
         id.setPassword(password)
 
 
+
         val call = service.login(id)
-        return call.enqueue(object: Callback<UUID> {
-            override fun onResponse(call: Call<UUID>, response: Response<UUID>) {
+        return call.enqueue(object: Callback<LoginData> {
+            override fun onResponse(call: Call<LoginData>, response: Response<LoginData>) {
                 if(response != null){
                     if(response.code() == 200){
-                        mld.value = response.body()
+                        mld.value = response.body()?.getauthenticationToken()
+                        AccessToken.set(response.body()?.getauthenticationToken()!!)
+                        corretUser = true
                         Log.d("login", "login successfully")
+
+                        if (stay_login) {
+                            var user = User(response.body()?.getauthenticationToken()!!)
+                            var db = DataBaseHandler(AccessToken.getContext())
+                            db.insertData(user)
+                        }
 
 
                     }
                 }
             }
 
-            override fun onFailure(call: Call<UUID>, t: Throwable) {
+            override fun onFailure(call: Call<LoginData>, t: Throwable) {
                 Log.d("loginError", "Error in login: " + t.message)
+                corretUser = false
             }
 
 
@@ -107,10 +121,10 @@ class LoginViewModel : ViewModel() {
 
     interface LoginService {
         @POST("/Create/Signup")
-        fun createAccount(@Body id: LoginData): Call<Void>
+        fun createAccount(@Body id: Login): Call<Void>
 
         @POST("/Read/Authenticate")
-        fun login(@Body id: LoginData): Call<UUID>
+        fun login(@Body id: Login): Call<LoginData>
     }
 
 }

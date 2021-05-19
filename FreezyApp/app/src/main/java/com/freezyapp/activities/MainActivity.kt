@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         AccessToken.setContext(this)
-        AccessToken.set(UUID.fromString("cb8e079b-6ef8-414f-b485-67c6bb57bd53"))
+        //AccessToken.set(UUID.fromString("cb8e079b-6ef8-414f-b485-67c6bb57bd53"))
 
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)

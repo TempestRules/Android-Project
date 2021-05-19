@@ -1,31 +1,15 @@
 package com.freezyapp.viewmodels.requestbodies
 
+import java.util.*
+
 class LoginData {
-    private var username: String? = null
-    private var password: String? = null
-    private var name: String? = null
+    private var authenticationToken: UUID? = null
 
-    fun getUsername(): String? {
-        return username
+    fun getauthenticationToken(): UUID? {
+        return authenticationToken
     }
 
-    fun setUsername(username: String?) {
-        this.username = name
-    }
-
-    fun getPassword(): String? {
-        return password
-    }
-
-    fun setPassword(password: String?) {
-        this.password = name
-    }
-
-    fun getName(): String? {
-        return name
-    }
-
-    fun setName(name: String?) {
-        this.name = name
+    fun setauthenticationToken(authenticationToken: UUID?) {
+        this.authenticationToken = authenticationToken!!
     }
 }

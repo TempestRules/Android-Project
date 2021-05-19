@@ -16,6 +16,10 @@ class AccessToken() {
             pref = Companion.context.getSharedPreferences(file_key, Context.MODE_PRIVATE)
         }
 
+        fun getContext(): Context{
+            return context
+        }
+
         private const val file_key: String = "AccessTokenFile"
         private const val token_key: String = "AccessToken"
 
