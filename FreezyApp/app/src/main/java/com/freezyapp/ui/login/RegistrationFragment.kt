@@ -46,10 +46,6 @@ class RegistrationFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity()).get(LoginViewModel::class.java)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     fun register(){
         viewModel.name = binding.name.text.toString()
         viewModel.username = binding.editTextTextPersonName.text.toString()
