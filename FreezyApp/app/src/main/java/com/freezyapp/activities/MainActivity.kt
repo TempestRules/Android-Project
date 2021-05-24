@@ -2,6 +2,7 @@ package com.freezyapp.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import com.google.android.material.navigation.NavigationView
@@ -27,9 +28,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AccessToken.setContext(this)
-        //AccessToken.set(UUID.fromString("cb8e079b-6ef8-414f-b485-67c6bb57bd53"))
-
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -37,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
+
         val navMenu = navView.menu
         var logoutView = navMenu.getItem(navMenu.size() - 1)
         logoutView.setOnMenuItemClickListener {
