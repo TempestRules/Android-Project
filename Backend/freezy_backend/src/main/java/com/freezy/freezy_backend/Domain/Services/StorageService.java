@@ -32,11 +32,13 @@ public class StorageService {
     public boolean createStorage_Unit(Storage storage) {
         try {
             if (authenticationService.verifyToken(storage.getAccessToken())) {
-                //Making sure that two identical storage_units can't be created.
-                if (!storage_unit_repository.existsByName(storage.getName())) {
                     Token token = tokenRepository.getTokenByToken(storage.getAccessToken());
                     Collection collection = collectionRepository.findCollectionById(token.getAccount_login().getAccount_details()
                             .getCollections().get(0).getId());
+
+                    if (collection.getStorage_units() == null) {
+                        collection.setStorage_units(new ArrayList<>());
+                    }
 
                     //Creating and adding the new Storage_Unit to the collection.
                     Storage_Unit storage_unit = new Storage_Unit(storage.getName(), storage.getColor());
@@ -44,8 +46,6 @@ public class StorageService {
 
                     collectionRepository.save(collection);
                     return true;
-                }
-
             }
         } catch (Exception e) {
             System.out.println("CreateStorage_Unit EXCEPTION: " + e);

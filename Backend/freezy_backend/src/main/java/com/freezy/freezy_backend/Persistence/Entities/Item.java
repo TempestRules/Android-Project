@@ -2,7 +2,6 @@ package com.freezy.freezy_backend.Persistence.Entities;
 
 import javax.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +40,9 @@ public class Item {
             name = "expiration_date",
             nullable = true,
             updatable = true,
-            columnDefinition = "TIMESTAMP WITHOUT TIME ZONE"
+            columnDefinition = "TEXT"
     )
-    private LocalDateTime expiration_date;
+    private String expiration_date;
 
     @Column(
             name = "unit",
@@ -73,7 +72,7 @@ public class Item {
 
     //Many to many relationship with Category
     @ManyToMany(
-            cascade = {CascadeType.ALL}
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH}
     )
     @JoinTable(
             name = "Item_Category",
@@ -91,7 +90,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String name, LocalDateTime expiration_date, String unit, double quantity) {
+    public Item(String name, String expiration_date, String unit, double quantity) {
         this.name = name;
         this.expiration_date = expiration_date;
         this.unit = unit;
@@ -117,11 +116,11 @@ public class Item {
         this.name = name;
     }
 
-    public LocalDateTime getExpiration_date() {
+    public String getExpiration_date() {
         return expiration_date;
     }
 
-    public void setExpiration_date(LocalDateTime expiration_date) {
+    public void setExpiration_date(String expiration_date) {
         this.expiration_date = expiration_date;
     }
 

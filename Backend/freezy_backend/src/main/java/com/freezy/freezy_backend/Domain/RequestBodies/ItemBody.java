@@ -1,6 +1,5 @@
 package com.freezy.freezy_backend.Domain.RequestBodies;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +8,7 @@ public class ItemBody {
     private UUID accessToken;
     private Long itemId;
     private String name;
-    private LocalDateTime expirationDate;
+    private String expirationDate;
     private String unit;
     private Double quantity;
     private Long storage_Unit_Id;
@@ -31,11 +30,11 @@ public class ItemBody {
         this.name = name;
     }
 
-    public LocalDateTime getExpirationDate() {
+    public String getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
+    public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 
@@ -77,5 +76,19 @@ public class ItemBody {
 
     public void setQuantity(Double quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemBody{" +
+                "accessToken=" + accessToken +
+                ", itemId=" + itemId +
+                ", name='" + name + '\'' +
+                ", expirationDate=" + expirationDate +
+                ", unit='" + unit + '\'' +
+                ", quantity=" + quantity +
+                ", storage_Unit_Id=" + storage_Unit_Id +
+                ", categoryIds=" + categoryIds +
+                '}';
     }
 }

@@ -1,10 +1,7 @@
 package com.freezy.freezy_backend;
 
 import com.freezy.freezy_backend.Persistence.Entities.*;
-import com.freezy.freezy_backend.Persistence.Repositories.Account_Details_Repository;
 import com.freezy.freezy_backend.Persistence.Repositories.Account_Login_Repository;
-import com.freezy.freezy_backend.Persistence.Repositories.CollectionRepository;
-import com.freezy.freezy_backend.Persistence.Repositories.TokenRepository;
 import com.google.gson.Gson;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.boot.CommandLineRunner;
@@ -15,8 +12,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -48,7 +43,7 @@ public class FreezyBackendApplication {
 
 	//Test method
 	@Bean
-	CommandLineRunner commandLineRunner(Account_Login_Repository account_login_repository, TokenRepository tokenRepository, Account_Details_Repository account_details_repository, CollectionRepository collectionRepository) {
+	CommandLineRunner commandLineRunner(Account_Login_Repository account_login_repository) {
 		return args -> {
 
 			createBasicAccount(account_login_repository);
@@ -58,7 +53,6 @@ public class FreezyBackendApplication {
 	private void createBasicAccount(Account_Login_Repository account_login_repository) {
 
 		UUID accessToken = UUID.randomUUID();
-		LocalDateTime localDateTime = LocalDateTime.now(Clock.systemDefaultZone());
 
 		Account_Login account_login = new Account_Login("TestUser", BCrypt.hashpw("Password", BCrypt.gensalt()));
 
@@ -70,7 +64,7 @@ public class FreezyBackendApplication {
 
 		Storage_Unit storage_unit = new Storage_Unit("Freezer", "Blue");
 
-		Item item = new Item("Oksekød", localDateTime, "500 grams", 1);
+		Item item = new Item("Oksekd", "2021-04-24T00:00:00", "500 grams", 1);
 
 		Category category = new Category("Meat", "Red");
 
@@ -91,5 +85,4 @@ public class FreezyBackendApplication {
 		//Saving
 		account_login_repository.save(account_login);
 	}
-
 }

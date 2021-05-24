@@ -9,10 +9,7 @@ import com.freezy.freezy_backend.Domain.Services.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/Delete")
@@ -27,21 +24,21 @@ public class DeleteController {
     @Autowired
     private ItemService itemService;
 
-    @DeleteMapping("/Storage")
+    @PostMapping("/Storage")
     public ResponseEntity<?> deleteStorage_Unit(@RequestBody Storage storage) {
         storageService.deleteStorage_Unit(storage);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/Category")
+    @PostMapping("/Category")
     public ResponseEntity<?> deleteCategory(@RequestBody CategoryBody categoryBody) {
         categoryService.deleteCategory(categoryBody);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/Item")
+    @PostMapping("/Item")
     public ResponseEntity<?> deleteItem(@RequestBody ItemBody itemBody) {
         itemService.deleteItem(itemBody);
 
