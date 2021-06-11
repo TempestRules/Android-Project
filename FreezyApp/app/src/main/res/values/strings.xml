@@ -48,6 +48,7 @@
     <string name="item_has_expiration">Has expiration date</string>
     <string name="item_old_quantity">Old Quantity:</string>
     <string name="item_new_quantity">New Quantity</string>
+    <string name="item_quantity">Quantity</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>

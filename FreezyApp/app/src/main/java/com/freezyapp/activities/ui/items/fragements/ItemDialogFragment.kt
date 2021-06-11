@@ -22,6 +22,8 @@ class ItemDialogFragment(private val itemViewModel: ItemModel, private val paren
         val oldQuantityLabel = view.findViewById<TextView>(R.id.dialog_old_quantity)
         oldQuantityLabel.text = itemViewModel.getCurrentItem()!!.getQuantity().toString() + " " + itemViewModel.getCurrentItem()!!.getUnit()
 
+        view.findViewById<TextView>(R.id.dialog_item_name).text = itemViewModel.getCurrentItem()!!.getName()
+
         val quantityField = view.findViewById<EditText>(R.id.dialog_item_new_quantity)
 
         view.findViewById<Button>(R.id.btn_update_item).setOnClickListener {

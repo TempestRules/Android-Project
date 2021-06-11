@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/item_name_hint"
+        android:text="@string/item_quantity"
         app:layout_constraintEnd_toStartOf="@+id/dialog_old_quantity"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
